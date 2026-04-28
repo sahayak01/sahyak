@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Workers — Sahayak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0a0a0f; --sky: #1e6bff; --sky-light: #4d8dff; --sky-pale: #ddeaff;
+      --aqua: #00c2cb; --green: #16a34a; --amber: #d97706; --red: #dc2626;
+      --surface: #fff; --bg: #f0f4ff; --muted: #64748b; --border: #e4e9f2;
+      --radius: 18px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; }
+
+    /* NAV */
+    .nav {
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px; height: 62px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--sky); }
+    .nav-brand span { color: var(--ink); }
+    .nav-tabs { display: flex; gap: 4px; }
+    .nav-tab {
+      padding: 7px 16px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      cursor: pointer; border: none; background: transparent; color: var(--muted); transition: 0.2s;
+    }
+    .nav-tab.active, .nav-tab:hover { background: var(--sky-pale); color: var(--sky); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-user { font-size: 14px; color: var(--muted); }
+    .nav-user b { color: var(--ink); }
+    .logout-btn {
+      padding: 7px 14px; border-radius: 10px; border: 1.5px solid var(--border);
+      font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; background: white; transition: 0.2s;
+    }
+    .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+    .main { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+
+    .tab-panel { display: none; animation: fadeIn 0.3s ease; }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* SEARCH PANEL */
+    .search-header { margin-bottom: 20px; }
+    .search-header h1 { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+    .search-header p { color: var(--muted); font-size: 14px; }
+
+    .search-box {
+      background: white; border-radius: var(--radius); padding: 24px;
+      box-shadow: 0 4px 20px rgba(30,107,255,0.08); border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .search-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 14px; align-items: end; }
+    .form-group { }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 13px 15px; border: 1.5px solid var(--border);
+      border-radius: 13px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+      background: #f8faff; outline: none; transition: 0.2s; color: var(--ink);
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--sky); background: white; box-shadow: 0 0 0 4px rgba(30,107,255,0.1);
+    }
+
+    .autocomplete-wrapper { position: relative; }
+    .suggestions-box {
+      display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      background: white; border: 1.5px solid var(--border); border-radius: 13px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.1); z-index: 200; max-height: 220px; overflow-y: auto;
+    }
+    .suggestion-item { padding: 11px 15px; font-size: 14px; color: #334155; cursor: pointer; border-bottom: 1px solid #f1f5f9; transition: 0.15s; }
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-item:hover { background: #e0f2fe; color: var(--sky); }
+    .suggestion-item strong { color: var(--aqua); }
+
+    .btn { padding: 13px 24px; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, var(--sky), var(--aqua)); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(30,107,255,0.3); }
+    .btn-outline { background: white; border: 1.5px solid var(--border); color: var(--ink); }
+    .btn-outline:hover { border-color: var(--sky); color: var(--sky); }
+    .btn-sm { padding: 9px 16px; font-size: 13px; border-radius: 10px; }
+    .btn-call { background: #e0f7fa; color: #00838f; border: 1.5px solid #b2ebf2; font-weight: 600; }
+    .btn-call:hover { background: #b2ebf2; }
+    .btn-hire { background: linear-gradient(135deg, var(--sky), var(--aqua)); color: white; }
+
+    /* WORKER CARDS GRID */
+    .workers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; }
+
+    .worker-card {
+      background: white; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(30,107,255,0.08); border: 1px solid var(--border);
+      transition: 0.25s; position: relative;
+    }
+    .worker-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(30,107,255,0.14); }
+    .wc-top {
+      background: linear-gradient(135deg, #1e6bff, #3b82f6, #00b4d8);
+      padding: 20px; position: relative; overflow: hidden;
+    }
+    .wc-top::before {
+      content: ''; position: absolute; width: 180px; height: 180px;
+      background: rgba(255,255,255,0.05); border-radius: 50%;
+      top: -60px; right: -50px;
+    }
+    .wc-top-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; }
+    .wc-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05));
+      border: 2px solid rgba(255,255,255,0.35);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: white;
+      flex-shrink: 0;
+    }
+    .wc-identity { flex: 1; min-width: 0; }
+    .wc-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: white; margin-bottom: 2px; }
+    .wc-jobs { font-size: 13px; color: rgba(255,255,255,0.75); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wc-avail {
+      position: absolute; top: 14px; right: 14px;
+      padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
+      background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .wc-body { padding: 16px 18px; }
+    .wc-detail { font-size: 13px; color: #475569; margin-bottom: 6px; }
+    .wc-detail span { font-weight: 600; color: var(--ink); }
+
+    .wc-societies { margin: 10px 0; }
+    .wc-societies-label { font-size: 12px; font-weight: 600; color: #334155; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
+    .soc-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .soc-tag {
+      background: var(--sky-pale); color: var(--sky);
+      padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    }
+    .soc-tag.highlight { background: #dcfce7; color: #166534; }
+
+    .wc-about { font-size: 13px; color: var(--muted); margin: 8px 0 12px; font-style: italic; line-height: 1.4; }
+
+    .wc-actions { display: flex; gap: 8px; padding-top: 6px; border-top: 1px solid var(--border); }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,10,15,0.55); backdrop-filter: blur(6px);
+      z-index: 500; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white; border-radius: 24px; padding: 32px;
+      max-width: 480px; width: 100%;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.2);
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn { from { opacity:0; transform:translateY(20px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+    .modal-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+    .modal-sub { color: var(--muted); font-size: 14px; margin-bottom: 22px; line-height: 1.5; }
+    .modal-worker-tag {
+      background: var(--sky-pale); color: var(--sky); padding: 8px 14px;
+      border-radius: 12px; font-size: 14px; font-weight: 600; margin-bottom: 18px;
+      display: inline-block;
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+
+    /* REQUESTS + HISTORY */
+    .req-list { display: flex; flex-direction: column; gap: 14px; }
+    .req-card {
+      background: white; border-radius: 14px; padding: 18px 20px;
+      border: 1.5px solid var(--border); position: relative;
+    }
+    .req-card.pending { border-left: 4px solid var(--amber); }
+    .req-card.accepted { border-left: 4px solid var(--green); }
+    .req-card.rejected { border-left: 4px solid var(--red); }
+    .req-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .req-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--ink); }
+    .req-time { font-size: 12px; color: var(--muted); }
+    .req-body { font-size: 14px; color: #475569; line-height: 1.5; }
+    .status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; margin-top: 10px; }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-accepted { background: #dcfce7; color: #166534; }
+    .status-rejected { background: #fee2e2; color: #991b1b; }
+
+    .accepted-banner {
+      background: linear-gradient(135deg, #16a34a, #22c55e); color: white;
+      border-radius: 14px; padding: 16px 20px; margin-top: 10px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .accepted-banner .icon { font-size: 26px; }
+    .accepted-banner p { font-size: 14px; }
+    .accepted-banner strong { font-family: 'Syne', sans-serif; font-size: 15px; }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .empty-state .empty-icon { font-size: 52px; margin-bottom: 14px; }
+    .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 20px; color: #334155; margin-bottom: 6px; }
+
+    .results-meta { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+    .results-meta b { color: var(--ink); }
+
+    .notif-dot { display: inline-block; width: 8px; height: 8px; background: var(--red); border-radius: 50%; margin-left: 4px; vertical-align: middle; }
+
+    @media (max-width: 700px) {
+      .search-grid { grid-template-columns: 1fr; }
+      .workers-grid { grid-template-columns: 1fr; }
+      .nav { padding: 0 14px; }
+      .nav-tabs .nav-tab { padding: 7px 10px; font-size: 12px; }
+    }
+
+/* ── Extra blue-white polish ───────────────────────────── */
+body{background:linear-gradient(135deg,#eef5ff 0%,#ffffff 50%,#eaf7ff 100%);}.card,.search-card,.search-box,.worker-card,.wcard,.rcard,.req-card{border-color:#dbeafe!important;box-shadow:0 8px 28px rgba(30,107,255,.08)!important;}nav,.nav{box-shadow:0 4px 20px rgba(30,107,255,.08)!important;}input,select,textarea{border-color:#dbeafe!important;}input:focus,select:focus,textarea:focus{border-color:#1e6bff!important;box-shadow:0 0 0 4px rgba(30,107,255,.10)!important;}
+
+
+
+    /* ── POLISHED BLUE-WHITE DECORATION UPDATE ── */
+    body{background:radial-gradient(circle at 8% 8%, rgba(30,107,255,.16), transparent 28%),radial-gradient(circle at 92% 14%, rgba(0,194,203,.14), transparent 26%),linear-gradient(180deg,#f7fbff 0%,#edf4ff 45%,#f8fbff 100%);color:var(--ink);}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:linear-gradient(rgba(30,107,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(30,107,255,.045) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 78%);}
+    .nav{box-shadow:0 10px 30px rgba(30,107,255,.08);}
+    .nav-brand{background:linear-gradient(135deg,#155cff,#00b8d9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .worker-intro,.hire-intro{position:relative;overflow:hidden;margin-bottom:22px;padding:28px;border-radius:28px;background:linear-gradient(135deg,#ffffff 0%,#eef6ff 58%,#e7fbff 100%);border:1px solid rgba(30,107,255,.13);box-shadow:0 22px 55px rgba(30,107,255,.13);}
+    .worker-intro::before,.hire-intro::before{content:'';position:absolute;width:320px;height:320px;border-radius:50%;right:-110px;top:-150px;background:radial-gradient(circle,rgba(30,107,255,.20),transparent 68%);}
+    .worker-intro::after,.hire-intro::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;left:-60px;bottom:-95px;background:radial-gradient(circle,rgba(0,194,203,.18),transparent 70%);}
+    .intro-content{position:relative;z-index:1;display:grid;grid-template-columns:1.35fr .9fr;gap:22px;align-items:center;}
+    .intro-badge{display:inline-flex;align-items:center;gap:8px;width:max-content;padding:7px 13px;border-radius:999px;background:#e8f1ff;color:#155cff;font-size:11.5px;font-weight:800;letter-spacing:.45px;text-transform:uppercase;margin-bottom:14px;border:1px solid #d5e5ff;}
+    .intro-badge span{width:8px;height:8px;border-radius:50%;background:#00b8d9;box-shadow:0 0 0 5px rgba(0,184,217,.12);}
+    .intro-content h1{font-family:'Syne',sans-serif;font-size:32px;line-height:1.05;letter-spacing:-1.1px;color:#071328;margin-bottom:10px;}
+    .intro-content p{color:#5c6c86;font-size:14px;line-height:1.7;max-width:520px;}
+    .intro-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+    .mini-pill{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:#fff;color:#1f3b68;border:1px solid #dce8f8;font-size:12.5px;font-weight:700;box-shadow:0 8px 18px rgba(30,107,255,.07);}
+    .intro-card{position:relative;z-index:1;background:rgba(255,255,255,.72);border:1px solid rgba(30,107,255,.12);border-radius:22px;padding:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 12px 30px rgba(30,107,255,.10);}
+    .intro-card-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}.intro-card-row:last-child{margin-bottom:0;}
+    .intro-ico{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#1e6bff,#00c2cb);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;box-shadow:0 10px 22px rgba(30,107,255,.22);}
+    .intro-card strong{display:block;font-family:'Syne',sans-serif;font-size:13.5px;color:#08142c;margin-bottom:2px;}.intro-card small{display:block;color:#64748b;font-size:11.5px;line-height:1.45;}
+    .card,.search-box,.req-card,.worker-card,.profile-hero,.success-banner{box-shadow:0 14px 38px rgba(30,107,255,.10),0 0 0 1px rgba(30,107,255,.08)!important;}
+    .card{border-radius:24px;border:1px solid rgba(30,107,255,.10);position:relative;overflow:hidden;}.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#1e6bff,#00c2cb,#77d7ff);}
+    .search-box{border-radius:24px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px)}
+    .worker-card{border-radius:24px;}.wc-top{background:linear-gradient(135deg,#0d47d9,#1196d8 58%,#00c2cb)!important;}
+    .form-group input,.form-group select,.form-group textarea,.society-tags-area{background:#fbfdff;border-color:#dbe7f7;}.form-group input:hover,.form-group select:hover,.form-group textarea:hover,.society-tags-area:hover{border-color:#bcd4f7;}
+    .job-chip,.time-chip{box-shadow:0 5px 14px rgba(30,107,255,.05);}.job-chip.selected,.time-chip.active,.btn-primary{background:linear-gradient(135deg,#155cff,#00b8d9)!important;box-shadow:0 12px 26px rgba(30,107,255,.28);}.profile-hero{background:linear-gradient(135deg,#0d47d9,#1196d8 58%,#00c2cb)!important;}
+    @media(max-width:760px){.intro-content{grid-template-columns:1fr}.intro-card{display:none}.intro-content h1{font-size:27px}.worker-intro,.hire-intro{padding:22px}}
+
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">Saha<span>yak</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('find', this)">🔎 Find Workers</button>
+    <button class="nav-tab" onclick="showTab('myrequests', this)" id="myReqTab">📋 My Requests</button>
+  </div>
+  <div class="nav-right">
+    <span class="nav-user">Hi, <b id="navName">—</b></span>
+    <button class="logout-btn" onclick="logout()">← Logout</button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- FIND TAB -->
+  <div class="tab-panel active" id="tab-find">
+
+    <section class="hire-intro">
+      <div class="intro-content">
+        <div><div class="intro-badge"><span></span> Find trusted help</div><h1>Search workers near your society faster.</h1><p>Use society and work type filters to find matching workers, view their profile details, call directly, or send a hire request.</p><div class="intro-actions"><div class="mini-pill">🔎 Smart society search</div><div class="mini-pill">🧰 Work type filters</div><div class="mini-pill">📋 Track requests</div></div></div>
+        <div class="intro-card"><div class="intro-card-row"><div class="intro-ico">🏘️</div><div><strong>Search by society</strong><small>Only matching service areas are shown first.</small></div></div><div class="intro-card-row"><div class="intro-ico">📞</div><div><strong>Call or request</strong><small>Contact workers directly or send a structured request.</small></div></div><div class="intro-card-row"><div class="intro-ico">✅</div><div><strong>Track status</strong><small>See pending, accepted and rejected hire requests.</small></div></div></div>
+      </div>
+    </section>
+
+    <div class="search-header">
+      <h1>Find a Worker 🔎</h1>
+      <p>Search by your society or complex. Only workers serving your area are shown.</p>
+    </div>
+
+    <div class="search-box">
+      <div class="search-grid">
+        <div class="form-group">
+          <label>Society / Complex</label>
+          <div class="autocomplete-wrapper">
+            <input type="text" id="searchSociety" placeholder="Your society name..." autocomplete="off">
+            <div class="suggestions-box" id="searchSuggestions"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Work Type</label>
+          <select id="searchJob">
+            <option value="">— Any Type —</option>
+            <option>Maid</option><option>Cook</option><option>Cleaner</option>
+            <option>Driver</option><option>Electrician</option><option>Plumber</option>
+            <option>Gardener</option><option>Babysitter</option><option>Security Guard</option>
+            <option>Carpenter</option><option>Painter</option><option>Pest Control</option>
+          </select>
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="doSearch()" style="white-space:nowrap;">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="searchResults"></div>
+  </div>
+
+  <!-- MY REQUESTS TAB -->
+  <div class="tab-panel" id="tab-myrequests">
+    <h2 style="font-family:'Syne',sans-serif; font-size:22px; font-weight:700; margin-bottom:6px;">📋 My Hire Requests</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;">Track requests you've sent to workers.</p>
+    <div id="myReqList" class="req-list"></div>
+  </div>
+
+</div>
+
+<!-- HIRE MODAL -->
+<div class="modal-overlay" id="hireModal">
+  <div class="modal">
+    <div class="modal-title">Send Hire Request 📨</div>
+    <p class="modal-sub">This worker will receive your request and can accept or reject it.</p>
+    <div class="modal-worker-tag" id="modalWorkerTag">—</div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Work Needed</label>
+      <select id="modalJobType">
+        <option value="">— Select Type —</option>
+        <option>Maid</option><option>Cook</option><option>Cleaner</option>
+        <option>Driver</option><option>Electrician</option><option>Plumber</option>
+        <option>Gardener</option><option>Babysitter</option><option>Security Guard</option>
+        <option>Carpenter</option><option>Painter</option><option>Pest Control</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Your Society / Location</label>
+      <input type="text" id="modalSociety" placeholder="e.g. Harmony Heights">
+    </div>
+    <div class="form-group" style="margin-bottom:0;margin-top:14px;">
+      <label>Message (optional)</label>
+      <input type="text" id="modalMessage" placeholder="e.g. Need daily 2 hours morning cooking">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="sendHireRequest()">Send Request 🚀</button>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+  requireLogin();
+  const user = getCurrentUser();
+  document.getElementById('navName').textContent = user.name;
+
+  initAutocomplete('searchSociety', 'searchSuggestions', getAllSocieties);
+
+  let hireTarget = null;
+
+  // ── Search ────────────────────────────────────────────────
+  function doSearch() {
+    const society = document.getElementById('searchSociety').value.trim();
+    const job = document.getElementById('searchJob').value;
+    const container = document.getElementById('searchResults');
+
+    const workers = searchWorkers(society, job);
+    container.innerHTML = '';
+
+    if (!workers.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">😕</div>
+          <h3>No workers found</h3>
+          <p>Try a different society name or work type.</p>
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = `<p class="results-meta"><b>${workers.length}</b> worker${workers.length > 1?'s':''} found${society ? ` in or near "<b>${society}</b>"` : ''}</p>`;
+    const grid = document.createElement('div');
+    grid.className = 'workers-grid';
+
+    workers.forEach(w => {
+      const initials = w.name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0,2);
+      const socTags = (w.societies || []).map(s => {
+        const isMatch = society && s.toLowerCase().includes(society.toLowerCase());
+        return `<span class="soc-tag ${isMatch ? 'highlight' : ''}">${isMatch ? '✓ ' : ''}${s}</span>`;
+      }).join('');
+
+      const card = document.createElement('div');
+      card.className = 'worker-card';
+      card.innerHTML = `
+        <div class="wc-top">
+          <span class="wc-avail">⏰ ${w.workTime || 'Flexible'}</span>
+          <div class="wc-top-inner">
+            <div class="wc-avatar">${initials}</div>
+            <div class="wc-identity">
+              <div class="wc-name">${w.name}</div>
+              <div class="wc-jobs">${(w.jobTypes || []).join(' · ')}</div>
+            </div>
+          </div>
+        </div>
+        <div class="wc-body">
+          <div class="wc-detail">📞 ${w.phone}</div>
+          ${w.gender || w.age ? `<div class="wc-detail">${w.gender ? `<span>${w.gender}</span>` : ''} ${w.age ? `· Age <span>${w.age}</span>` : ''} ${w.experience ? `· Exp: <span>${w.experience}</span>` : ''}</div>` : ''}
+          ${w.about ? `<div class="wc-about">"${w.about}"</div>` : ''}
+          <div class="wc-societies">
+            <div class="wc-societies-label">Serves in</div>
+            <div class="soc-tags">${socTags || '<span class="soc-tag">—</span>'}</div>
+          </div>
+          <div class="wc-actions">
+            <a href="tel:${w.phone}" class="btn btn-sm btn-call">📞 Call</a>
+            <button class="btn btn-sm btn-hire" onclick='openHireModal(${JSON.stringify(w).replace(/'/g,"&#39;")})'>📨 Hire Request</button>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
+  }
+
+  // ── Modal ─────────────────────────────────────────────────
+  function openHireModal(worker) {
+    hireTarget = worker;
+    document.getElementById('modalWorkerTag').textContent = `${worker.name} · ${(worker.jobTypes||[]).join(', ')}`;
+    document.getElementById('modalJobType').value = (worker.jobTypes||[])[0] || '';
+    document.getElementById('modalSociety').value = '';
+    document.getElementById('modalMessage').value = '';
+    document.getElementById('hireModal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('hireModal').classList.remove('open');
+    hireTarget = null;
+  }
+
+  document.getElementById('hireModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  function sendHireRequest() {
+    if (!hireTarget) return;
+    const jobType = document.getElementById('modalJobType').value;
+    const society = document.getElementById('modalSociety').value.trim();
+    const message = document.getElementById('modalMessage').value.trim();
+
+    if (!jobType) return alert('❌ Please select the work type needed.');
+    if (!society) return alert('❌ Please enter your society/location.');
+
+    const req = {
+      id: Date.now(),
+      workerPhone: hireTarget.phone,
+      workerName: hireTarget.name,
+      hirerPhone: user.phone,
+      hirerName: user.name,
+      jobType, society, message,
+      status: 'pending',
+      createdAt: Date.now()
+    };
+
+    saveRequest(req);
+    closeModal();
+    alert(`✅ Hire request sent to ${hireTarget.name}! You'll be notified when they respond.`);
+    updateMyReqBadge();
+  }
+
+  // ── My Requests ────────────────────────────────────────────
+  function loadMyRequests() {
+    const list = document.getElementById('myReqList');
+    const reqs = getRequestsForHirer(user.phone);
+
+    if (!reqs.length) {
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><h3>No requests sent yet</h3><p>When you send a hire request, it appears here with its status.</p></div>`;
+      return;
+    }
+
+    list.innerHTML = '';
+    reqs.slice().reverse().forEach(req => {
+      const card = document.createElement('div');
+      card.className = `req-card ${req.status}`;
+      card.innerHTML = `
+        <div class="req-header">
+          <div>
+            <div class="req-name">🧰 ${req.workerName}</div>
+            <div style="font-size:13px;color:var(--muted);">📞 ${req.workerPhone} · Work: ${req.jobType}</div>
+          </div>
+          <div class="req-time">${timeAgo(req.createdAt)}</div>
+        </div>
+        <div class="req-body">
+          🏠 ${req.society}${req.message ? ` · "${req.message}"` : ''}
+        </div>
+        ${req.status === 'pending'
+          ? `<span class="status-pill status-pending">⏳ Awaiting response</span>`
+          : req.status === 'accepted'
+            ? `<div class="accepted-banner"><div class="icon">🎉</div><div><strong>Worker is ready!</strong><p>${req.workerName} has accepted your request. Call them to confirm timing.</p></div></div>`
+            : `<span class="status-pill status-rejected">❌ Request declined</span><br><span style="font-size:13px;color:var(--muted);margin-top:6px;display:block;">You can try a different worker.</span>`
+        }
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function updateMyReqBadge() {
+    const pending = getRequestsForHirer(user.phone).filter(r => r.status === 'pending').length;
+    document.getElementById('myReqTab').innerHTML = `📋 My Requests${pending > 0 ? '<span class="notif-dot"></span>' : ''}`;
+  }
+
+  // ── Tabs ──────────────────────────────────────────────────
+  function showTab(name, el) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    if (el) el.classList.add('active');
+    if (name === 'myrequests') loadMyRequests();
+  }
+
+  function logout() {
+    localStorage.removeItem(USER_KEY);
+    window.location.href = 'index.html';
+  }
+
+  updateMyReqBadge();
+</script>
+</body>
+</html>
