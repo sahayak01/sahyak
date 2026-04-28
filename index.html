@@ -7,153 +7,88 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
 <style>
+/* ── YOUR CSS THEME ── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --saffron:#FF9933;
-  --saffron-pale:#FFB366;
-  --saffron-dim:rgba(255,153,51,0.15);
-  --saffron-glow:rgba(255,153,51,0.4);
-  --emerald:#00C896;
-  --emerald-dim:rgba(0,200,150,0.12);
-  --cream:#F5F0E8;
-  --ink:#060608;
-  --muted:rgba(245,240,232,0.38);
-  --text:rgba(245,240,232,0.92);
-}
-html,body{height:100%;overflow:hidden;background:var(--ink);color:var(--text);font-family:'Bricolage Grotesque',sans-serif}
-canvas#bg{position:fixed;inset:0;z-index:0}
+:root{--saffron:#1e6bff;--saffron-pale:#5aa2ff;--saffron-dim:rgba(30,107,255,.12);--saffron-glow:rgba(30,107,255,.28);--emerald:#00b4d8;--emerald-dim:rgba(0,180,216,.10);--cream:#0f172a;--ink:#f4f8ff;--muted:#64748b;--text:#0f172a;}
+html,body{height:100%;background:linear-gradient(135deg,#eef5ff 0%,#ffffff 48%,#eaf7ff 100%);color:var(--text);font-family:'Bricolage Grotesque',sans-serif;overflow:hidden;}
+canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 
-.cursor{position:fixed;width:12px;height:12px;background:var(--saffron);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s;mix-blend-mode:difference}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(255,153,51,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.2s,height 0.2s,border-color 0.2s}
+.cursor{position:fixed;width:12px;height:12px;background:#1e6bff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s;opacity:.55;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(30,107,255,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.2s,height 0.2s,border-color 0.2s}
 
 .layout{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;min-height:100vh;overflow:hidden}
 
 /* LEFT PANEL */
-.brand-panel{display:flex;flex-direction:column;justify-content:center;padding:60px 56px;position:relative;overflow:hidden}
-.brand-panel::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:linear-gradient(to bottom,transparent,rgba(255,153,51,0.35) 30%,rgba(255,153,51,0.35) 70%,transparent)}
-
-.mandala{position:absolute;bottom:-100px;left:-100px;width:440px;height:440px;border-radius:50%;border:1px solid rgba(255,153,51,0.06);animation:spin 80s linear infinite;pointer-events:none}
-.mandala::before{content:'';position:absolute;inset:36px;border-radius:50%;border:1px solid rgba(255,153,51,0.045)}
-.mandala::after{content:'';position:absolute;inset:72px;border-radius:50%;border:1px solid rgba(255,153,51,0.035)}
+.brand-panel{display:flex;flex-direction:column;justify-content:center;padding:60px 56px;position:relative;overflow:hidden;background:linear-gradient(145deg,#f7fbff 0%,#ffffff 52%,#edf6ff 100%);}
+.brand-panel::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:linear-gradient(to bottom,transparent,rgba(30,107,255,.20) 30%,rgba(0,180,216,.20) 70%,transparent)}
+.mandala{position:absolute;bottom:-100px;left:-100px;width:440px;height:440px;border-radius:50%;border:1px solid rgba(30,107,255,.07);animation:spin 80s linear infinite;pointer-events:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--saffron);font-weight:500;margin-bottom:28px;display:flex;align-items:center;gap:12px}
-.eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--saffron)}
+.eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#1e6bff;font-weight:500;margin-bottom:28px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:'';display:block;width:24px;height:1px;background:#1e6bff}
 
-.logo-mark{width:52px;height:52px;background:linear-gradient(135deg,rgba(255,153,51,0.18),rgba(0,200,150,0.08));border:1px solid rgba(255,153,51,0.35);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:30px;box-shadow:0 0 36px rgba(255,153,51,0.08)}
+.logo-mark{width:52px;height:52px;background:linear-gradient(135deg,rgba(30,107,255,.12),rgba(0,180,216,.10));border:1px solid rgba(30,107,255,.25);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:30px;box-shadow:0 12px 34px rgba(30,107,255,.12);}
+.brand-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,4.5vw,64px);font-weight:300;line-height:1.05;letter-spacing:-1px;color:#0f172a;margin-bottom:22px}
+.brand-headline em{font-style:italic;background:linear-gradient(135deg,#1e6bff,#00b4d8,#1e6bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 
-.brand-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,4.5vw,64px);font-weight:300;line-height:1.05;letter-spacing:-1px;color:var(--cream);margin-bottom:22px}
-.brand-headline em{font-style:italic;background:linear-gradient(135deg,#FF9933,#FFD580,#FF9933);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shine 5s linear infinite}
-@keyframes shine{to{background-position:200% center}}
-
-.brand-desc{font-size:13.5px;line-height:1.85;color:var(--muted);max-width:320px;margin-bottom:44px}
-
+.brand-desc{font-size:13.5px;line-height:1.85;color:#64748b;max-width:320px;margin-bottom:44px}
 .trust-row{display:flex;flex-direction:column;gap:13px}
 .trust-item{display:flex;align-items:center;gap:13px}
-.trust-dot{width:5px;height:5px;border-radius:50%;background:var(--saffron);flex-shrink:0;box-shadow:0 0 7px var(--saffron)}
-.trust-text{font-size:12.5px;color:var(--muted)}
-
-.society-chips{position:absolute;top:0;right:-8px;bottom:0;width:180px;overflow:hidden;pointer-events:none;mask-image:linear-gradient(to bottom,transparent,black 18%,black 82%,transparent)}
-.chip{position:absolute;background:rgba(255,153,51,0.07);border:1px solid rgba(255,153,51,0.14);border-radius:999px;padding:4px 11px;font-size:10.5px;color:var(--muted);white-space:nowrap;animation:chip-float linear infinite}
-@keyframes chip-float{from{transform:translateY(110vh)}to{transform:translateY(-200px)}}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:#1e6bff;box-shadow:0 0 10px rgba(30,107,255,.35);}
+.trust-text{font-size:12.5px;color:#64748b}
 
 /* RIGHT PANEL */
-.form-panel{display:flex;align-items:center;justify-content:center;padding:40px 52px;overflow:hidden}
-.form-inner{width:100%;max-width:370px}
+.form-panel{display:flex;align-items:center;justify-content:center;padding:40px 52px;overflow:hidden;background:rgba(255,255,255,.72);backdrop-filter:blur(18px);}
+.form-inner{width:100%;max-width:370px;background:rgba(255,255,255,.92);border:1px solid #dbeafe;border-radius:28px;padding:34px;box-shadow:0 28px 70px rgba(30,107,255,.14);}
 
 .step{display:none;animation:step-reveal 0.5s cubic-bezier(0.16,1,0.3,1) both}
 .step.active{display:block}
 @keyframes step-reveal{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
 .step-indicator{display:flex;align-items:center;gap:6px;margin-bottom:34px}
-.si-step{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);transition:color 0.3s}
-.si-step.active{color:var(--saffron)}
-.si-step.done{color:var(--emerald)}
-.si-num{width:21px;height:21px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;transition:all 0.3s}
-.si-step.active .si-num{background:var(--saffron);border-color:var(--saffron);color:#060608}
-.si-step.done .si-num{background:rgba(0,200,150,0.15);border-color:var(--emerald);color:var(--emerald)}
-.si-sep{width:18px;height:1px;background:rgba(255,255,255,0.07)}
+.si-step{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#64748b;transition:color 0.3s}
+.si-step.active{color:#1e6bff}
+.si-step.done{color:#00b4d8}
+.si-num{width:21px;height:21px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
+.si-step.active .si-num{background:#1e6bff;border-color:#1e6bff;color:#fff}
+.si-step.done .si-num{background:#e0f2fe;border-color:#00b4d8;color:#0369a1}
+.si-sep{width:18px;height:1px;background:#dbeafe;}
 
-.form-heading{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;line-height:1.1;letter-spacing:-0.5px;color:var(--cream);margin-bottom:6px}
-.form-heading em{font-style:italic;color:var(--saffron-pale)}
-.form-sub{font-size:12.5px;color:var(--muted);margin-bottom:28px;line-height:1.65}
+.form-heading{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:#0f172a;margin-bottom:6px}
+.form-heading em{font-style:italic;background:linear-gradient(135deg,#1e6bff,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.form-sub{font-size:12.5px;color:#64748b;margin-bottom:28px;}
 
 .field{margin-bottom:16px;position:relative}
-.field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:9px;transition:color 0.2s}
-.field:focus-within label{color:var(--saffron)}
-.field input{width:100%;background:rgba(245,240,232,0.04);border:1px solid rgba(245,240,232,0.09);border-radius:12px;padding:14px 16px;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;color:var(--cream);outline:none;transition:all 0.25s;caret-color:var(--saffron)}
+.field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#53657d;margin-bottom:9px;}
+.field input{width:100%;background:#f8fbff;border:1px solid #dbeafe;border-radius:12px;padding:14px 16px;font-size:14px;color:#0f172a;outline:none;}
 .field input.pfx{padding-left:48px}
-.pre-text{position:absolute;left:16px;bottom:15px;font-size:14px;color:var(--muted);pointer-events:none}
-.field input::placeholder{color:rgba(245,240,232,0.16)}
-.field input:focus{background:rgba(255,153,51,0.05);border-color:rgba(255,153,51,0.33);box-shadow:0 0 0 4px rgba(255,153,51,0.055),0 0 22px rgba(255,153,51,0.03)}
-.field::after{content:'';position:absolute;bottom:1px;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,var(--saffron),transparent);transform:scaleX(0);transition:transform 0.3s;border-radius:1px}
-.field:focus-within::after{transform:scaleX(1)}
+.pre-text{position:absolute;left:16px;bottom:15px;font-size:14px;color:#64748b}
+.field input:focus{background:#fff;border-color:#1e6bff;box-shadow:0 0 0 4px rgba(30,107,255,.10)}
 
-.btn-cta{width:100%;padding:14px 22px;background:linear-gradient(135deg,#FF9933 0%,#FFB84D 50%,#FF9933 100%);background-size:200% auto;border:none;border-radius:12px;font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.2px;color:#060608;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;box-shadow:0 8px 28px rgba(255,153,51,0.22)}
-.btn-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);pointer-events:none}
-.btn-cta:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 14px 36px rgba(255,153,51,0.35)}
-.btn-cta:active{transform:scale(0.99)}
+.btn-cta{width:100%;padding:14px 22px;background:linear-gradient(135deg,#1e6bff 0%,#00b4d8 100%);border:none;border-radius:12px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;transition:all 0.3s;box-shadow:0 10px 28px rgba(30,107,255,.24)}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(30,107,255,.32)}
+.btn-ghost{width:100%;padding:12px;background:#fff;border:1px solid #dbeafe;border-radius:12px;font-size:13px;color:#64748b;cursor:pointer;margin-top:9px;}
 
-.btn-ghost{width:100%;padding:12px;background:transparent;border:1px solid rgba(245,240,232,0.07);border-radius:12px;font-family:'Bricolage Grotesque',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;margin-top:9px;transition:all 0.2s}
-.btn-ghost:hover{border-color:rgba(245,240,232,0.18);color:var(--text)}
+/* OTP UI */
+.otp-boxes{display:flex;gap:6px;margin-bottom:14px;justify-content:center}
+.otp-boxes input{width:38px;height:42px;text-align:center;font-size:18px;font-weight:700;background:#fff;border:1px solid #dbeafe;border-radius:10px;color:#1e6bff;outline:none;}
+.otp-boxes input.ok{border-color:#00b4d8;background:#effaff;}
 
-/* OTP */
-.otp-reveal{background:linear-gradient(135deg,rgba(255,153,51,0.08),rgba(0,200,150,0.04));border:1px solid rgba(255,153,51,0.18);border-radius:13px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.otp-reveal-label{font-size:11px;color:var(--muted);line-height:1.5}
-.otp-reveal-label strong{display:block;font-size:11.5px;color:var(--text);font-weight:500;margin-bottom:2px}
-.otp-code{font-size:19px;font-weight:800;letter-spacing:4px;background:linear-gradient(135deg,#FF9933,#00C896);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-family:'Bricolage Grotesque',sans-serif}
-
-.otp-hint{font-size:12px;color:var(--muted);text-align:center;margin-bottom:16px}
-.otp-hint span{color:var(--saffron-pale);font-weight:500}
-
-.otp-boxes{display:flex;gap:8px;margin-bottom:14px}
-.otp-boxes input{flex:1;padding:15px 0;text-align:center;font-size:19px;font-weight:700;font-family:'Bricolage Grotesque',sans-serif;background:rgba(245,240,232,0.04);border:1px solid rgba(245,240,232,0.09);border-radius:11px;color:var(--cream);outline:none;transition:all 0.2s;caret-color:var(--saffron)}
-.otp-boxes input:focus{background:rgba(255,153,51,0.06);border-color:rgba(255,153,51,0.38);box-shadow:0 0 0 3px rgba(255,153,51,0.07);transform:translateY(-2px)}
-.otp-boxes input.ok{border-color:rgba(0,200,150,0.38);background:rgba(0,200,150,0.05);color:var(--emerald)}
-
-.resend-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.resend-label{font-size:11.5px;color:var(--muted)}
-.resend-btn{font-size:12px;font-weight:600;color:var(--saffron);background:none;border:none;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;opacity:0.32;transition:opacity 0.3s}
-.resend-btn.live{opacity:1}
-
-/* Role */
 .role-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px}
-.role-card{position:relative;overflow:hidden;background:rgba(245,240,232,0.03);border:1px solid rgba(245,240,232,0.07);border-radius:15px;padding:19px 14px;cursor:pointer;transition:all 0.3s cubic-bezier(0.16,1,0.3,1);text-align:center}
-.role-card::before{content:'';position:absolute;inset:0;border-radius:15px;opacity:0;transition:opacity 0.3s}
-.role-card.hirer::before{background:linear-gradient(145deg,rgba(255,153,51,0.11),transparent)}
-.role-card.worker::before{background:linear-gradient(145deg,rgba(0,200,150,0.11),transparent)}
-.role-card:hover{transform:translateY(-3px)}
-.role-card:hover::before{opacity:1}
-.role-card.chosen.hirer{border-color:rgba(255,153,51,0.48);box-shadow:0 0 26px rgba(255,153,51,0.09),inset 0 0 14px rgba(255,153,51,0.025)}
-.role-card.chosen.hirer::before{opacity:1}
-.role-card.chosen.worker{border-color:rgba(0,200,150,0.48);box-shadow:0 0 26px rgba(0,200,150,0.09),inset 0 0 14px rgba(0,200,150,0.025)}
-.role-card.chosen.worker::before{opacity:1}
-.role-tick{position:absolute;top:9px;right:9px;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;opacity:0;transform:scale(0.4);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1)}
-.hirer .role-tick{background:var(--saffron);color:#060608}
-.worker .role-tick{background:var(--emerald);color:#060608}
-.role-card.chosen .role-tick{opacity:1;transform:scale(1)}
-.role-emoji{font-size:28px;margin-bottom:9px;display:block}
-.role-title{font-size:12.5px;font-weight:700;color:var(--cream);margin-bottom:3px;letter-spacing:-0.2px}
-.role-blurb{font-size:10px;color:var(--muted);line-height:1.5}
-
-.welcome-name{font-family:'Cormorant Garamond',serif;font-size:37px;font-weight:300;line-height:1;color:var(--cream);margin-bottom:5px}
-.welcome-name em{font-style:italic;color:var(--saffron-pale)}
+.role-card{position:relative;background:#f8fbff;border:1px solid #dbeafe;border-radius:15px;padding:19px 14px;cursor:pointer;transition:all 0.3s;text-align:center}
+.role-card.chosen{border-color:#1e6bff;box-shadow:0 0 0 4px rgba(30,107,255,.10);}
+.role-tick{position:absolute;top:9px;right:9px;width:17px;height:17px;border-radius:50%;background:#1e6bff;color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;opacity:0;}
+.role-card.chosen .role-tick{opacity:1;}
 
 .msg{font-size:12px;padding:10px 13px;border-radius:10px;margin-bottom:13px;display:none}
-.msg.err{background:rgba(255,80,80,0.09);border:1px solid rgba(255,80,80,0.2);color:#FF7070}
-.msg.ok{background:rgba(0,200,150,0.09);border:1px solid rgba(0,200,150,0.2);color:var(--emerald)}
+.msg.err{background:#fff1f2;border:1px solid #fecdd3;color:#dc2626}
+.msg.ok{background:#ecfeff;border:1px solid #a5f3fc;color:#0369a1}
 
 @media(max-width:760px){
-  .layout{grid-template-columns:1fr;overflow-y:auto;height:auto}
-  .brand-panel{display:none}
-  .form-panel{padding:36px 24px;min-height:100svh;align-items:flex-start;padding-top:52px}
-  html,body{overflow:auto;height:auto}
+    .brand-panel{display:none}
+    .layout{grid-template-columns:1fr}
+    .form-panel{padding:20px}
 }
-
-/* ── Blue & White theme polish ───────────────────────────── */
-:root{--saffron:#1e6bff;--saffron-pale:#5aa2ff;--saffron-dim:rgba(30,107,255,.12);--saffron-glow:rgba(30,107,255,.28);--emerald:#00b4d8;--emerald-dim:rgba(0,180,216,.10);--cream:#0f172a;--ink:#f4f8ff;--muted:#64748b;--text:#0f172a;}
-html,body{background:linear-gradient(135deg,#eef5ff 0%,#ffffff 48%,#eaf7ff 100%);color:var(--text);}canvas#bg{opacity:.35;}.cursor{background:#1e6bff;mix-blend-mode:normal;opacity:.55;}.cursor-ring{border-color:rgba(30,107,255,.35)!important;}.brand-panel{background:linear-gradient(145deg,#f7fbff 0%,#ffffff 52%,#edf6ff 100%);}.brand-panel::after{background:linear-gradient(to bottom,transparent,rgba(30,107,255,.20) 30%,rgba(0,180,216,.20) 70%,transparent);}.mandala,.mandala::before,.mandala::after{border-color:rgba(30,107,255,.07);}.eyebrow{color:#1e6bff;}.eyebrow::before,.trust-dot{background:#1e6bff;box-shadow:0 0 10px rgba(30,107,255,.35);}.logo-mark{background:linear-gradient(135deg,rgba(30,107,255,.12),rgba(0,180,216,.10));border-color:rgba(30,107,255,.25);box-shadow:0 12px 34px rgba(30,107,255,.12);}.brand-headline{color:#0f172a;}.brand-headline em,.form-heading em,.welcome-name em,.otp-code{background:linear-gradient(135deg,#1e6bff,#00b4d8,#1e6bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}.brand-desc,.trust-text,.form-sub,.otp-hint,.resend-label,.role-blurb{color:#64748b;}.chip{background:rgba(30,107,255,.07);border-color:rgba(30,107,255,.14);color:#475569;}.form-panel{background:rgba(255,255,255,.72);backdrop-filter:blur(18px);}.form-inner{background:rgba(255,255,255,.92);border:1px solid #dbeafe;border-radius:28px;padding:34px;box-shadow:0 28px 70px rgba(30,107,255,.14);}.form-heading,.welcome-name,.role-title{color:#0f172a;}.si-step{color:#64748b}.si-step.active{color:#1e6bff}.si-step.done{color:#00b4d8}.si-step.active .si-num{background:#1e6bff;border-color:#1e6bff;color:#fff}.si-step.done .si-num{background:#e0f2fe;border-color:#00b4d8;color:#0369a1}.si-sep{background:#dbeafe;}.field label{color:#53657d}.field:focus-within label{color:#1e6bff}.field input{background:#f8fbff;border-color:#dbeafe;color:#0f172a;caret-color:#1e6bff}.field input::placeholder{color:#94a3b8}.field input:focus{background:#fff;border-color:#1e6bff;box-shadow:0 0 0 4px rgba(30,107,255,.10)}.field::after{background:linear-gradient(90deg,transparent,#1e6bff,transparent)}.pre-text{color:#64748b}.btn-cta{background:linear-gradient(135deg,#1e6bff 0%,#00b4d8 100%);color:#fff;box-shadow:0 10px 28px rgba(30,107,255,.24)}.btn-cta:hover{box-shadow:0 16px 36px rgba(30,107,255,.32)}.btn-ghost{background:#fff;border-color:#dbeafe;color:#64748b}.btn-ghost:hover{border-color:#1e6bff;color:#1e6bff}.otp-reveal{background:linear-gradient(135deg,#eef6ff,#f8fcff);border-color:#bfdbfe}.otp-reveal-label{color:#64748b}.otp-reveal-label strong{color:#0f172a}.otp-boxes{gap:6px;justify-content:center}.otp-boxes input{flex:0 0 38px;width:38px;height:42px;padding:0;text-align:center;font-size:16px;border-radius:10px;background:#fff;border-color:#dbeafe;color:#1e6bff;caret-color:#1e6bff}.otp-boxes input:focus{background:#fff;border-color:#1e6bff;box-shadow:0 0 0 3px rgba(30,107,255,.10);transform:translateY(-1px)}.otp-boxes input.ok{border-color:#00b4d8;background:#effaff;color:#0369a1}.resend-btn{color:#1e6bff}.role-card{background:#f8fbff;border-color:#dbeafe}.role-card.hirer::before,.role-card.worker::before{background:linear-gradient(145deg,rgba(30,107,255,.10),rgba(0,180,216,.04))}.role-card.chosen.hirer,.role-card.chosen.worker{border-color:#1e6bff;box-shadow:0 0 0 4px rgba(30,107,255,.10),0 12px 28px rgba(30,107,255,.12)}.hirer .role-tick,.worker .role-tick{background:#1e6bff;color:#fff}.msg.err{background:#fff1f2;border-color:#fecdd3;color:#dc2626}.msg.ok{background:#ecfeff;border-color:#a5f3fc;color:#0369a1}@media(max-width:760px){.form-inner{padding:28px 22px;}}
-
 </style>
 </head>
 <body>
@@ -163,128 +98,83 @@ html,body{background:linear-gradient(135deg,#eef5ff 0%,#ffffff 48%,#eaf7ff 100%)
 <canvas id="bg"></canvas>
 
 <div class="layout">
-
-  <!-- LEFT PANEL -->
-  <div class="brand-panel">
-    <div class="mandala"></div>
-
-    <div class="eyebrow">Sahayak Platform</div>
-    <div class="logo-mark">🤝</div>
-
-    <h1 class="brand-headline">
-      Your city.<br>
-      Your <em>helpers.</em><br>
-      One place.
-    </h1>
-
-    <p class="brand-desc">
-      Sahayak connects trusted domestic workers with families across Surat's finest societies — verified, available, and ready to serve.
-    </p>
-
-    <div class="trust-row">
-      <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">100+ societies across Surat</span></div>
-      <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Maids, Cooks, Drivers & more</span></div>
-      <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Phone verified, no password needed</span></div>
+    <div class="brand-panel">
+        <div class="mandala"></div>
+        <div class="eyebrow">Sahayak Platform</div>
+        <div class="logo-mark">🤝</div>
+        <h1 class="brand-headline">Your city.<br>Your <em>helpers.</em><br>One place.</h1>
+        <p class="brand-desc">Sahayak connects trusted domestic workers with families across Surat's finest societies.</p>
+        <div class="trust-row">
+            <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Phone verified login</span></div>
+            <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Verified domestic help</span></div>
+        </div>
     </div>
 
-    <div class="society-chips" id="chips"></div>
-  </div>
+    <div class="form-panel">
+        <div class="form-inner">
+            <div class="step-indicator">
+                <div class="si-step active" id="si1"><div class="si-num">1</div>Details</div>
+                <div class="si-sep"></div>
+                <div class="si-step" id="si2"><div class="si-num">2</div>Verify</div>
+                <div class="si-sep"></div>
+                <div class="si-step" id="si3"><div class="si-num">3</div>Role</div>
+            </div>
 
-  <!-- RIGHT PANEL -->
-  <div class="form-panel">
-    <div class="form-inner">
+            <div class="step active" id="step1">
+                <h2 class="form-heading">Good to see<br>you, <em>friend.</em></h2>
+                <p class="form-sub">Enter your details to get started.</p>
+                <div class="field">
+                    <label>Mobile Number</label>
+                    <span class="pre-text">+91</span>
+                    <input type="tel" id="s1Phone" class="pfx" placeholder="98765 43210" maxlength="10">
+                </div>
+                <div class="field">
+                    <label>Your Name</label>
+                    <input type="text" id="s1Name" placeholder="Full name">
+                </div>
+                <div class="msg err" id="err1"></div>
+                <button class="btn-cta" id="send-otp-btn" onclick="doSendOTP()">Send Code &nbsp;→</button>
+            </div>
 
-      <div class="step-indicator">
-        <div class="si-step active" id="si1"><div class="si-num">1</div>Details</div>
-        <div class="si-sep"></div>
-        <div class="si-step" id="si2"><div class="si-num">2</div>Verify</div>
-        <div class="si-sep"></div>
-        <div class="si-step" id="si3"><div class="si-num">3</div>Role</div>
-      </div>
+            <div class="step" id="step2">
+                <h2 class="form-heading">Verify<br><em>OTP.</em></h2>
+                <p class="form-sub">Enter the 6-digit code sent to your phone.</p>
+                <div class="otp-boxes">
+                    <input type="text" maxlength="1" class="otp-digit" id="d0">
+                    <input type="text" maxlength="1" class="otp-digit" id="d1">
+                    <input type="text" maxlength="1" class="otp-digit" id="d2">
+                    <input type="text" maxlength="1" class="otp-digit" id="d3">
+                    <input type="text" maxlength="1" class="otp-digit" id="d4">
+                    <input type="text" maxlength="1" class="otp-digit" id="d5">
+                </div>
+                <div class="msg err" id="err2"></div>
+                <div class="msg ok" id="ok2"></div>
+                <button class="btn-cta" onclick="doVerify()">Verify &nbsp;→</button>
+                <button class="btn-ghost" onclick="goTo(1)">← Change number</button>
+            </div>
 
-      <!-- STEP 1 -->
-      <div class="step active" id="step1">
-        <h2 class="form-heading">Good to see<br>you, <em>friend.</em></h2>
-        <p class="form-sub">Enter your phone & name — we'll send a one-time code to verify.</p>
-
-        <div class="field">
-          <label>Mobile Number</label>
-          <span class="pre-text">+91</span>
-          <input type="tel" id="s1Phone" class="pfx" placeholder="98765 43210" maxlength="10" inputmode="numeric">
+            <div class="step" id="step3">
+                <h2 class="form-heading">Welcome,<br><em id="wName">User</em>! 👋</h2>
+                <p class="form-sub">Choose your role to continue.</p>
+                <div class="role-grid">
+                    <div class="role-card" id="role-hirer" onclick="pickRole('hirer')">
+                        <div class="role-tick">✓</div>
+                        <span>🔎</span><br><strong>Hirer</strong>
+                    </div>
+                    <div class="role-card" id="role-worker" onclick="pickRole('worker')">
+                        <div class="role-tick">✓</div>
+                        <span>🧰</span><br><strong>Worker</strong>
+                    </div>
+                </div>
+                <button class="btn-cta" onclick="doProceed()">Complete Setup</button>
+            </div>
         </div>
-        <div class="field">
-          <label>Your Name</label>
-          <input type="text" id="s1Name" placeholder="Full name" autocomplete="name">
-        </div>
-
-        <div class="msg err" id="err1"></div>
-        <button class="btn-cta" onclick="doSendOTP()">Send Code &nbsp;→</button>
-      </div>
-
-      <!-- STEP 2 -->
-      <div class="step" id="step2">
-        <h2 class="form-heading">One-time<br><em>code.</em></h2>
-        <p class="otp-hint">Sent to <span id="otpNum">+91 —</span></p>
-
-        <div class="otp-reveal">
-          <div class="otp-reveal-label">
-            <strong>Dev mode — your OTP</strong>
-            SMS not wired up yet
-          </div>
-          <div class="otp-code" id="otpDisplay">——</div>
-        </div>
-
-        <div class="otp-boxes">
-          <input type="text" maxlength="1" inputmode="numeric" class="otp-digit" id="d0">
-          <input type="text" maxlength="1" inputmode="numeric" class="otp-digit" id="d1">
-          <input type="text" maxlength="1" inputmode="numeric" class="otp-digit" id="d2">
-          <input type="text" maxlength="1" inputmode="numeric" class="otp-digit" id="d3">
-          <input type="text" maxlength="1" inputmode="numeric" class="otp-digit" id="d4">
-          <input type="text" maxlength="1" inputmode="numeric" class="otp-digit" id="d5">
-        </div>
-
-        <div class="resend-row">
-          <span class="resend-label" id="rsLabel">Resend in <b id="rsCount">30</b>s</span>
-          <button class="resend-btn" id="rsBtn" onclick="doResend()">Resend</button>
-        </div>
-
-        <div class="msg err" id="err2"></div>
-        <div class="msg ok" id="ok2"></div>
-        <button class="btn-cta" onclick="doVerify()">Verify &nbsp;→</button>
-        <button class="btn-ghost" onclick="goTo(1)">← Change number</button>
-      </div>
-
-      <!-- STEP 3 -->
-      <div class="step" id="step3">
-        <div class="welcome-name">Hello,<br><em id="wName">friend</em>. 👋</div>
-        <p class="form-sub" style="margin-top:8px;margin-bottom:22px">Choose how you'd like to use Sahayak today.</p>
-
-        <div class="role-grid">
-          <div class="role-card hirer" onclick="pickRole('hirer',this)">
-            <div class="role-tick">✓</div>
-            <span class="role-emoji">🔎</span>
-            <div class="role-title">Find a Worker</div>
-            <div class="role-blurb">Hire trusted help for your home</div>
-          </div>
-          <div class="role-card worker" onclick="pickRole('worker',this)">
-            <div class="role-tick">✓</div>
-            <span class="role-emoji">🧰</span>
-            <div class="role-title">I'm a Worker</div>
-            <div class="role-blurb">Register & get discovered by families</div>
-          </div>
-        </div>
-
-        <div class="msg err" id="err3"></div>
-        <button class="btn-cta" onclick="doProceed()">Let's Go &nbsp;→</button>
-      </div>
-
     </div>
-  </div>
-
 </div>
-<script>
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
  const firebaseConfig = {
     apiKey: "AIzaSyCXTN5TDt6mLgocHw5Cycu349YubT7PCrc",
@@ -295,104 +185,95 @@ import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.g
     appId: "1:579100799205:web:ac26464fe319857fb6240c",
     measurementId: "G-BQGBDH111W"
   };
-  
-// 3. Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    let confirmationResult = null;
+    let selectedRole = null;
 
-/* ── UI GLOBALS ── */
-let confirmationResult = null; 
-let role = null;
-let rsTimer = null;
+    // 2. RECAPTCHA (Invisible)
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'send-otp-btn', {
+        'size': 'invisible'
+    });
 
-/* ── RECAPTCHA SETUP ── */
-// Firebase needs this to prevent SMS spamming. 
-// We'll attach it to the 'send-otp' button.
-window.recaptchaVerifier = new RecaptchaVerifier(auth, 'send-otp-btn', {
-    'size': 'invisible',
-    'callback': (response) => {
-        // reCAPTCHA solved, proceed with OTP
-    }
-});
-
-/* ── STEP 1: SEND OTP ── */
-window.doSendOTP = async function() {
-    const phone = document.getElementById('s1Phone').value.trim();
-    const name = document.getElementById('s1Name').value.trim();
-    
-    if(!name) { showErr('err1','Please enter your name.'); return; }
-    if(!/^\d{10}$/.test(phone)) { showErr('err1','Enter a valid 10-digit number.'); return; }
-
-    const fullPhone = "+91" + phone;
-    const appVerifier = window.recaptchaVerifier;
-
-    try {
-        confirmationResult = await signInWithPhoneNumber(auth, fullPhone, appVerifier);
+    // 3. ATTACH FUNCTIONS TO WINDOW (Fixes "Not Defined" errors)
+    window.doSendOTP = async function() {
+        const phone = document.getElementById('s1Phone').value;
+        const name = document.getElementById('s1Name').value;
+        if(!phone || phone.length < 10) return showErr('err1', 'Enter 10-digit number');
         
-        // UI Updates
-        localStorage.setItem('sahayak_user', JSON.stringify({name, phone}));
-        document.getElementById('otpNum').textContent = '+91 ' + phone;
-        document.getElementById('wName').textContent = name.split(' ')[0];
-        
-        // Hide the "Dev Mode" dummy display from your HTML
-        document.querySelector('.otp-reveal').style.display = 'none'; 
-        
-        goTo(2);
-        startResend();
-    } catch (error) {
-        showErr('err1', "SMS Error: " + error.message);
-        console.error(error);
-        // Reset reCAPTCHA if it fails
-        if(window.recaptchaVerifier) window.recaptchaVerifier.render().then(id => grecaptcha.reset(id));
-    }
-};
+        try {
+            confirmationResult = await signInWithPhoneNumber(auth, "+91" + phone, window.recaptchaVerifier);
+            document.getElementById('wName').innerText = name;
+            goTo(2);
+        } catch (error) {
+            showErr('err1', error.message);
+            window.recaptchaVerifier.render().then(id => grecaptcha.reset(id));
+        }
+    };
 
-/* ── STEP 2: VERIFY OTP ── */
-window.doVerify = async function() {
-    const entered = Array.from(document.querySelectorAll('.otp-digit')).map(i => i.value).join('');
-    
-    if(entered.length < 6) { showErr('err2','Enter the 6-digit code.'); return; }
+    window.doVerify = async function() {
+        const otp = Array.from(document.querySelectorAll('.otp-digit')).map(i => i.value).join('');
+        try {
+            await confirmationResult.confirm(otp);
+            showOk('ok2', 'Verified!');
+            setTimeout(() => goTo(3), 800);
+        } catch (error) {
+            showErr('err2', 'Invalid OTP code');
+        }
+    };
 
-    try {
-        const result = await confirmationResult.confirm(entered);
-        const user = result.user;
-        
-        hide('err2');
-        showOk('ok2', '✓ Verified!');
-        clearInterval(rsTimer);
-        setTimeout(() => goTo(3), 600);
-    } catch (error) {
-        showErr('err2', 'Invalid OTP code.');
-        // Shake animation for digits
-        document.querySelectorAll('.otp-digit').forEach(i => {
-            i.value = '';
-            i.classList.remove('ok');
+    window.goTo = function(n) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + n).classList.add('active');
+        document.querySelectorAll('.si-step').forEach((s, i) => {
+            s.className = i + 1 < n ? 'si-step done' : i + 1 === n ? 'si-step active' : 'si-step';
         });
-    }
-};
+    };
 
-/* ── KEEP YOUR EXISTING UI FUNCTIONS ── */
-// Ensure these functions remain in your script to handle the visual transitions
-function showErr(id, m) { 
-    const e = document.getElementById(id); 
-    e.textContent = m; e.style.display = 'block'; 
-}
-function showOk(id, m) { 
-    const e = document.getElementById(id); 
-    e.textContent = m; e.style.display = 'block'; 
-}
-function hide(id) { document.getElementById(id).style.display = 'none'; }
+    window.pickRole = function(r) {
+        selectedRole = r;
+        document.querySelectorAll('.role-card').forEach(c => c.classList.remove('chosen'));
+        document.getElementById('role-' + r).classList.add('chosen');
+    };
 
-function goTo(n) {
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    document.getElementById('step' + n).classList.add('active');
-    for(let i=1; i<=3; i++){
-        const si = document.getElementById('si'+i);
-        si.className = 'si-step';
-        if(i < n) si.classList.add('done');
-        else if(i === n) si.classList.add('active');
-    }
-}
+    window.doProceed = function() {
+        if(!selectedRole) return alert('Please pick a role');
+        window.location.href = selectedRole + ".html";
+    };
+
+    function showErr(id, m) { const e = document.getElementById(id); e.innerText = m; e.style.display = 'block'; }
+    function showOk(id, m) { const e = document.getElementById(id); e.innerText = m; e.style.display = 'block'; }
+
+    // 4. OTP INPUT AUTO-FOCUS
+    document.querySelectorAll('.otp-digit').forEach((inp, i, all) => {
+        inp.oninput = () => { if(inp.value && i < 5) all[i+1].focus(); };
+        inp.onkeydown = (e) => { if(e.key === 'Backspace' && !inp.value && i > 0) all[i-1].focus(); };
+    });
+</script>
+
+<script>
+    // Particle Background
+    (function(){
+        const c=document.getElementById('bg'),ctx=c.getContext('2d');
+        let W,H,pts=[];
+        function resize(){W=c.width=innerWidth;H=c.height=innerHeight}
+        resize(); window.onresize=resize;
+        class Pt{
+            constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3}
+            update(){this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>W)this.vx*=-1; if(this.y<0||this.y>H)this.vy*=-1}
+            draw(){ctx.beginPath();ctx.arc(this.x,this.y,1,0,Math.PI*2);ctx.fillStyle='#1e6bff';ctx.fill()}
+        }
+        for(let i=0;i<50;i++)pts.push(new Pt());
+        function anim(){ctx.clearRect(0,0,W,H); pts.forEach(p=>{p.update();p.draw()}); requestAnimationFrame(anim)}
+        anim();
+    })();
+
+    // Cursor Logic
+    const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+    document.onmousemove=(e)=>{
+        cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
+        ring.style.left=e.clientX+'px'; ring.style.top=e.clientY+'px';
+    };
 </script>
 </body>
 </html>
