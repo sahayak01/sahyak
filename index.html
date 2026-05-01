@@ -5,46 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sahayak — Service Connect</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
-/* ── YOUR CSS THEME ── */
+/* ═══════════════════════════════════════════════
+   SHARED / ROOT
+═══════════════════════════════════════════════ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--saffron:#1e6bff;--saffron-pale:#5aa2ff;--saffron-dim:rgba(30,107,255,.12);--saffron-glow:rgba(30,107,255,.28);--emerald:#00b4d8;--emerald-dim:rgba(0,180,216,.10);--cream:#0f172a;--ink:#f4f8ff;--muted:#64748b;--text:#0f172a;}
-html,body{height:100%;background:linear-gradient(135deg,#eef5ff 0%,#ffffff 48%,#eaf7ff 100%);color:var(--text);font-family:'Bricolage Grotesque',sans-serif;overflow:hidden;}
+
+/* PAGE VIEWS */
+.page{display:none}
+.page.active{display:block}
+
+/* ═══════════════════════════════════════════════
+   LOGIN PAGE
+═══════════════════════════════════════════════ */
+#page-login{
+  --saffron:#1e6bff;--saffron-pale:#5aa2ff;--saffron-dim:rgba(30,107,255,.12);--saffron-glow:rgba(30,107,255,.28);
+  --emerald:#00b4d8;--emerald-dim:rgba(0,180,216,.10);--cream:#0f172a;--ink:#f4f8ff;--muted:#64748b;--text:#0f172a;
+}
+#page-login.active{display:flex;min-height:100vh;background:linear-gradient(135deg,#eef5ff 0%,#ffffff 48%,#eaf7ff 100%);color:var(--text);font-family:'Bricolage Grotesque',sans-serif;overflow:hidden;}
 canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
-
-.cursor{position:fixed;width:12px;height:12px;background:#1e6bff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.25s,height 0.25s;opacity:.55;}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(30,107,255,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.2s,height 0.2s,border-color 0.2s}
-
-.layout{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;min-height:100vh;overflow:hidden}
-
-/* LEFT PANEL */
+.cursor{position:fixed;width:12px;height:12px;background:#1e6bff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s;opacity:.55;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(30,107,255,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+.layout{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;min-height:100vh;overflow:hidden;width:100%}
 .brand-panel{display:flex;flex-direction:column;justify-content:center;padding:60px 56px;position:relative;overflow:hidden;background:linear-gradient(145deg,#f7fbff 0%,#ffffff 52%,#edf6ff 100%);}
 .brand-panel::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:linear-gradient(to bottom,transparent,rgba(30,107,255,.20) 30%,rgba(0,180,216,.20) 70%,transparent)}
 .mandala{position:absolute;bottom:-100px;left:-100px;width:440px;height:440px;border-radius:50%;border:1px solid rgba(30,107,255,.07);animation:spin 80s linear infinite;pointer-events:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#1e6bff;font-weight:500;margin-bottom:28px;display:flex;align-items:center;gap:12px}
 .eyebrow::before{content:'';display:block;width:24px;height:1px;background:#1e6bff}
-
 .logo-mark{width:52px;height:52px;background:linear-gradient(135deg,rgba(30,107,255,.12),rgba(0,180,216,.10));border:1px solid rgba(30,107,255,.25);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:30px;box-shadow:0 12px 34px rgba(30,107,255,.12);}
 .brand-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,4.5vw,64px);font-weight:300;line-height:1.05;letter-spacing:-1px;color:#0f172a;margin-bottom:22px}
 .brand-headline em{font-style:italic;background:linear-gradient(135deg,#1e6bff,#00b4d8,#1e6bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-
 .brand-desc{font-size:13.5px;line-height:1.85;color:#64748b;max-width:320px;margin-bottom:44px}
 .trust-row{display:flex;flex-direction:column;gap:13px}
 .trust-item{display:flex;align-items:center;gap:13px}
 .trust-dot{width:5px;height:5px;border-radius:50%;background:#1e6bff;box-shadow:0 0 10px rgba(30,107,255,.35);}
 .trust-text{font-size:12.5px;color:#64748b}
-
-/* RIGHT PANEL */
 .form-panel{display:flex;align-items:center;justify-content:center;padding:40px 52px;overflow:hidden;background:rgba(255,255,255,.72);backdrop-filter:blur(18px);}
 .form-inner{width:100%;max-width:370px;background:rgba(255,255,255,.92);border:1px solid #dbeafe;border-radius:28px;padding:34px;box-shadow:0 28px 70px rgba(30,107,255,.14);}
-
 .step{display:none;animation:step-reveal 0.5s cubic-bezier(0.16,1,0.3,1) both}
 .step.active{display:block}
 @keyframes step-reveal{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-
 .step-indicator{display:flex;align-items:center;gap:6px;margin-bottom:34px}
 .si-step{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#64748b;transition:color 0.3s}
 .si-step.active{color:#1e6bff}
@@ -53,268 +56,1196 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 .si-step.active .si-num{background:#1e6bff;border-color:#1e6bff;color:#fff}
 .si-step.done .si-num{background:#e0f2fe;border-color:#00b4d8;color:#0369a1}
 .si-sep{width:18px;height:1px;background:#dbeafe;}
-
 .form-heading{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:#0f172a;margin-bottom:6px}
 .form-heading em{font-style:italic;background:linear-gradient(135deg,#1e6bff,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .form-sub{font-size:12.5px;color:#64748b;margin-bottom:28px;}
-
 .field{margin-bottom:16px;position:relative}
 .field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#53657d;margin-bottom:9px;}
 .field input{width:100%;background:#f8fbff;border:1px solid #dbeafe;border-radius:12px;padding:14px 16px;font-size:14px;color:#0f172a;outline:none;}
 .field input.pfx{padding-left:48px}
 .pre-text{position:absolute;left:16px;bottom:15px;font-size:14px;color:#64748b}
 .field input:focus{background:#fff;border-color:#1e6bff;box-shadow:0 0 0 4px rgba(30,107,255,.10)}
-
-/* Passcode specific styling */
-.passcode-input {
-    letter-spacing: 0.8em;
-    text-align: center;
-    font-size: 24px !important;
-    font-weight: 700;
-}
-
-.btn-cta{width:100%;padding:14px 22px;background:linear-gradient(135deg,#1e6bff 0%,#00b4d8 100%);border:none;border-radius:12px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;transition:all 0.3s;box-shadow:0 10px 28px rgba(30,107,255,.24)}
+.passcode-input{letter-spacing:0.8em;text-align:center;font-size:24px!important;font-weight:700;}
+.btn-cta{width:100%;padding:14px 22px;background:linear-gradient(135deg,#1e6bff 0%,#00b4d8 100%);border:none;border-radius:12px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;transition:all 0.3s;box-shadow:0 10px 28px rgba(30,107,255,.24);margin-bottom:8px;}
 .btn-cta:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(30,107,255,.32)}
-.btn-cta:disabled{opacity: 0.6; cursor: not-allowed; transform: none;}
-
-/* UI */
+.btn-cta:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.btn-ghost{width:100%;padding:11px 22px;background:transparent;border:1px solid #dbeafe;border-radius:12px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;transition:all 0.2s;}
+.btn-ghost:hover{border-color:#1e6bff;color:#1e6bff;}
 .role-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px}
 .role-card{position:relative;background:#f8fbff;border:1px solid #dbeafe;border-radius:15px;padding:19px 14px;cursor:pointer;transition:all 0.3s;text-align:center}
 .role-card.chosen{border-color:#1e6bff;box-shadow:0 0 0 4px rgba(30,107,255,.10);}
 .role-tick{position:absolute;top:9px;right:9px;width:17px;height:17px;border-radius:50%;background:#1e6bff;color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;opacity:0;}
 .role-card.chosen .role-tick{opacity:1;}
-
 .msg{font-size:12px;padding:10px 13px;border-radius:10px;margin-bottom:13px;display:none}
 .msg.err{background:#fff1f2;border:1px solid #fecdd3;color:#dc2626}
 .msg.ok{background:#ecfeff;border:1px solid #a5f3fc;color:#0369a1}
-
 @media(max-width:760px){
-    .brand-panel{display:none}
-    .layout{grid-template-columns:1fr}
-    .form-panel{padding:20px}
+  .brand-panel{display:none}
+  .layout{grid-template-columns:1fr}
+  .form-panel{padding:20px}
+}
+
+/* ═══════════════════════════════════════════════
+   HIRER + WORKER SHARED STYLES
+═══════════════════════════════════════════════ */
+#page-hirer, #page-worker {
+  --ink:#0a0a0f;--sky:#1e6bff;--sky-light:#4d8dff;--sky-pale:#ddeaff;
+  --aqua:#00c2cb;--green:#16a34a;--amber:#d97706;--red:#dc2626;
+  --surface:#fff;--bg:#f0f4ff;--muted:#64748b;--border:#e4e9f2;--radius:18px;
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;
+  background:radial-gradient(circle at 8% 8%,rgba(30,107,255,.16),transparent 28%),radial-gradient(circle at 92% 14%,rgba(0,194,203,.14),transparent 26%),linear-gradient(180deg,#f7fbff 0%,#edf4ff 45%,#f8fbff 100%);
+  color:var(--ink);
+}
+#page-hirer::before, #page-worker::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:linear-gradient(rgba(30,107,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(30,107,255,.045) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 78%);}
+.nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 10px 30px rgba(30,107,255,.08);}
+.nav-brand{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:linear-gradient(135deg,#155cff,#00b8d9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-brand span{background:none;-webkit-text-fill-color:var(--ink);}
+.nav-tabs{display:flex;gap:4px;}
+.nav-tab{padding:7px 16px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:0.2s;font-family:'DM Sans',sans-serif;}
+.nav-tab.active,.nav-tab:hover{background:var(--sky-pale);color:var(--sky);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-user{font-size:14px;color:var(--muted);}
+.nav-user b{color:var(--ink);}
+.logout-btn{padding:7px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;background:white;transition:0.2s;font-family:'DM Sans',sans-serif;}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
+.main{max-width:1100px;margin:0 auto;padding:30px 20px;}
+.tab-panel{display:none;animation:fadeIn 0.3s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.btn{padding:13px 24px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:0.2s;}
+.btn-primary{background:linear-gradient(135deg,#155cff,#00b8d9)!important;color:white;box-shadow:0 12px 26px rgba(30,107,255,.28);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(30,107,255,0.3)!important;}
+.btn-outline{background:white;border:1.5px solid var(--border);color:var(--ink);}
+.btn-outline:hover{border-color:var(--sky);color:var(--sky);}
+.btn-sm{padding:9px 16px;font-size:13px;border-radius:10px;}
+.btn-call{background:#e0f7fa;color:#00838f;border:1.5px solid #b2ebf2;font-weight:600;}
+.btn-call:hover{background:#b2ebf2;}
+.btn-hire{background:linear-gradient(135deg,var(--sky),var(--aqua));color:white;}
+.btn-full{width:100%;}
+.btn-green{background:linear-gradient(135deg,#16a34a,#22c55e);color:white;}
+.btn-red{background:linear-gradient(135deg,#dc2626,#ef4444);color:white;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:12px;font-weight:600;color:#334155;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.4px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:13px;font-size:14px;font-family:'DM Sans',sans-serif;background:#fbfdff;border-color:#dbe7f7;outline:none;transition:0.2s;color:var(--ink);}
+.form-group input:hover,.form-group select:hover,.form-group textarea:hover{border-color:#bcd4f7;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#1e6bff!important;background:white;box-shadow:0 0 0 4px rgba(30,107,255,.10)!important;}
+.form-group textarea{resize:vertical;min-height:80px;}
+.req-list{display:flex;flex-direction:column;gap:14px;}
+.req-card{background:white;border-radius:14px;padding:18px 20px;border:1.5px solid var(--border);position:relative;box-shadow:0 8px 28px rgba(30,107,255,.08)!important;}
+.req-card.pending{border-left:4px solid var(--amber);}
+.req-card.accepted{border-left:4px solid var(--green);}
+.req-card.rejected{border-left:4px solid var(--red);}
+.req-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.req-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--ink);}
+.req-time{font-size:12px;color:var(--muted);}
+.req-body{font-size:14px;color:#475569;line-height:1.5;}
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;margin-top:10px;}
+.status-pending{background:#fef3c7;color:#92400e;}
+.status-accepted{background:#dcfce7;color:#166534;}
+.status-rejected{background:#fee2e2;color:#991b1b;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state .empty-icon{font-size:52px;margin-bottom:14px;}
+.empty-state h3{font-family:'Syne',sans-serif;font-size:20px;color:#334155;margin-bottom:6px;}
+.notif-dot{display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;margin-left:4px;vertical-align:middle;}
+.card{background:white;border-radius:24px;padding:28px;box-shadow:0 14px 38px rgba(30,107,255,.10),0 0 0 1px rgba(30,107,255,.08)!important;border:1px solid rgba(30,107,255,.10);margin-bottom:20px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#1e6bff,#00c2cb,#77d7ff);}
+.card-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.card-sub{color:var(--muted);font-size:14px;margin-bottom:24px;}
+/* Intro banners */
+.worker-intro,.hire-intro{position:relative;overflow:hidden;margin-bottom:22px;padding:28px;border-radius:28px;background:linear-gradient(135deg,#ffffff 0%,#eef6ff 58%,#e7fbff 100%);border:1px solid rgba(30,107,255,.13);box-shadow:0 22px 55px rgba(30,107,255,.13);}
+.worker-intro::before,.hire-intro::before{content:'';position:absolute;width:320px;height:320px;border-radius:50%;right:-110px;top:-150px;background:radial-gradient(circle,rgba(30,107,255,.20),transparent 68%);}
+.worker-intro::after,.hire-intro::after{content:'';position:absolute;width:180px;height:180px;border-radius:50%;left:-60px;bottom:-95px;background:radial-gradient(circle,rgba(0,194,203,.18),transparent 70%);}
+.intro-content{position:relative;z-index:1;display:grid;grid-template-columns:1.35fr .9fr;gap:22px;align-items:center;}
+.intro-badge{display:inline-flex;align-items:center;gap:8px;width:max-content;padding:7px 13px;border-radius:999px;background:#e8f1ff;color:#155cff;font-size:11.5px;font-weight:800;letter-spacing:.45px;text-transform:uppercase;margin-bottom:14px;border:1px solid #d5e5ff;}
+.intro-badge span{width:8px;height:8px;border-radius:50%;background:#00b8d9;box-shadow:0 0 0 5px rgba(0,184,217,.12);}
+.intro-content h1{font-family:'Syne',sans-serif;font-size:32px;line-height:1.05;letter-spacing:-1.1px;color:#071328;margin-bottom:10px;}
+.intro-content p{color:#5c6c86;font-size:14px;line-height:1.7;max-width:520px;}
+.intro-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.mini-pill{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:#fff;color:#1f3b68;border:1px solid #dce8f8;font-size:12.5px;font-weight:700;box-shadow:0 8px 18px rgba(30,107,255,.07);}
+.intro-card{position:relative;z-index:1;background:rgba(255,255,255,.72);border:1px solid rgba(30,107,255,.12);border-radius:22px;padding:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 12px 30px rgba(30,107,255,.10);}
+.intro-card-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.intro-card-row:last-child{margin-bottom:0;}
+.intro-ico{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#1e6bff,#00c2cb);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;box-shadow:0 10px 22px rgba(30,107,255,.22);}
+.intro-card strong{display:block;font-family:'Syne',sans-serif;font-size:13.5px;color:#08142c;margin-bottom:2px;}
+.intro-card small{display:block;color:#64748b;font-size:11.5px;line-height:1.45;}
+@media(max-width:760px){
+  .intro-content{grid-template-columns:1fr}
+  .intro-card{display:none}
+  .intro-content h1{font-size:27px}
+  .worker-intro,.hire-intro{padding:22px}
+}
+
+/* ═══════════════════════════════════════════════
+   HIRER-SPECIFIC STYLES
+═══════════════════════════════════════════════ */
+.search-header{margin-bottom:20px;}
+.search-header h1{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.search-header p{color:var(--muted);font-size:14px;}
+.search-box{background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:24px;padding:24px;box-shadow:0 14px 38px rgba(30,107,255,.10),0 0 0 1px rgba(30,107,255,.08)!important;border:1px solid var(--border);margin-bottom:24px;}
+.search-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;align-items:end;}
+.autocomplete-wrapper{position:relative;}
+.suggestions-box{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:white;border:1.5px solid var(--border);border-radius:13px;box-shadow:0 12px 28px rgba(0,0,0,0.1);z-index:200;max-height:220px;overflow-y:auto;}
+.suggestion-item{padding:11px 15px;font-size:14px;color:#334155;cursor:pointer;border-bottom:1px solid #f1f5f9;transition:0.15s;}
+.suggestion-item:last-child{border-bottom:none;}
+.suggestion-item:hover{background:#e0f2fe;color:var(--sky);}
+.suggestion-item strong{color:var(--aqua);}
+.workers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px;}
+.worker-card{background:white;border-radius:24px;overflow:hidden;box-shadow:0 14px 38px rgba(30,107,255,.10),0 0 0 1px rgba(30,107,255,.08)!important;border:1px solid var(--border);transition:0.25s;position:relative;}
+.worker-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(30,107,255,.14)!important;}
+.wc-top{background:linear-gradient(135deg,#0d47d9,#1196d8 58%,#00c2cb)!important;padding:20px;position:relative;overflow:hidden;}
+.wc-top::before{content:'';position:absolute;width:180px;height:180px;background:rgba(255,255,255,0.05);border-radius:50%;top:-60px;right:-50px;}
+.wc-top-inner{position:relative;z-index:1;display:flex;align-items:center;gap:14px;}
+.wc-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(255,255,255,.05));border:2px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:white;flex-shrink:0;}
+.wc-identity{flex:1;min-width:0;}
+.wc-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:white;margin-bottom:2px;}
+.wc-jobs{font-size:13px;color:rgba(255,255,255,.75);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.wc-avail{position:absolute;top:14px;right:14px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.25);}
+.wc-body{padding:16px 18px;}
+.wc-detail{font-size:13px;color:#475569;margin-bottom:6px;}
+.wc-detail span{font-weight:600;color:var(--ink);}
+.wc-societies{margin:10px 0;}
+.wc-societies-label{font-size:12px;font-weight:600;color:#334155;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;}
+.soc-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.soc-tag{background:var(--sky-pale);color:var(--sky);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;}
+.soc-tag.highlight{background:#dcfce7;color:#166534;}
+.wc-about{font-size:13px;color:var(--muted);margin:8px 0 12px;font-style:italic;line-height:1.4;}
+.wc-actions{display:flex;gap:8px;padding-top:6px;border-top:1px solid var(--border);}
+.results-meta{color:var(--muted);font-size:14px;margin-bottom:16px;}
+.results-meta b{color:var(--ink);}
+.accepted-banner{background:linear-gradient(135deg,#16a34a,#22c55e);color:white;border-radius:14px;padding:16px 20px;margin-top:10px;display:flex;align-items:center;gap:10px;}
+.accepted-banner .icon{font-size:26px;}
+.accepted-banner p{font-size:14px;}
+.accepted-banner strong{font-family:'Syne',sans-serif;font-size:15px;}
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,15,.55);backdrop-filter:blur(6px);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:24px;padding:32px;max-width:480px;width:100%;box-shadow:0 32px 64px rgba(0,0,0,0.2);animation:modalIn 0.3s ease;}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.modal-sub{color:var(--muted);font-size:14px;margin-bottom:22px;line-height:1.5;}
+.modal-worker-tag{background:var(--sky-pale);color:var(--sky);padding:8px 14px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:18px;display:inline-block;}
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+@media(max-width:700px){
+  .search-grid{grid-template-columns:1fr;}
+  .workers-grid{grid-template-columns:1fr;}
+  .nav{padding:0 14px;}
+  .nav-tabs .nav-tab{padding:7px 10px;font-size:12px;}
+}
+
+/* ═══════════════════════════════════════════════
+   WORKER-SPECIFIC STYLES
+═══════════════════════════════════════════════ */
+#page-worker .main{max-width:760px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.society-tags-area{border:1.5px solid #dbe7f7;border-radius:13px;padding:10px 12px;background:#fbfdff;min-height:52px;cursor:text;}
+.society-tags-area input{border:none!important;background:transparent!important;padding:4px 6px!important;box-shadow:none!important;font-size:14px;outline:none;min-width:160px;}
+.society-tags-area.focused{border-color:var(--sky);background:white;box-shadow:0 0 0 4px rgba(30,107,255,.10);}
+.tag-chip{display:inline-flex;align-items:center;gap:5px;background:var(--sky-pale);color:var(--sky);padding:4px 10px;border-radius:999px;font-size:13px;font-weight:600;margin:3px;}
+.tag-chip .remove{cursor:pointer;font-size:14px;line-height:1;color:var(--sky);}
+.tag-chip .remove:hover{color:var(--red);}
+.job-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.job-chip{padding:8px 16px;border-radius:999px;border:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:0.2s;background:white;box-shadow:0 5px 14px rgba(30,107,255,.05);}
+.job-chip:hover{border-color:var(--sky);color:var(--sky);background:var(--sky-pale);}
+.job-chip.selected{background:linear-gradient(135deg,#155cff,#00b8d9)!important;color:white;border-color:transparent;}
+.time-chips{display:flex;gap:10px;flex-wrap:wrap;}
+.time-chip{padding:9px 18px;border-radius:999px;border:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:0.2s;background:white;box-shadow:0 5px 14px rgba(30,107,255,.05);}
+.time-chip.active{background:linear-gradient(135deg,#155cff,#00b8d9)!important;color:white;border-color:transparent;}
+.profile-hero{background:linear-gradient(135deg,#0d47d9,#1196d8 58%,#00c2cb)!important;border-radius:var(--radius);padding:28px;color:white;margin-bottom:20px;position:relative;overflow:hidden;}
+.profile-hero::before{content:'';position:absolute;width:300px;height:300px;background:rgba(255,255,255,0.05);border-radius:50%;top:-100px;right:-80px;}
+.profile-hero-inner{position:relative;z-index:1;}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.05));border:2.5px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:14px;color:white;}
+.profile-name{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;margin-bottom:4px;}
+.profile-meta{font-size:14px;opacity:.8;margin-bottom:14px;}
+.profile-badges{display:flex;flex-wrap:wrap;gap:8px;}
+.badge{padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:white;}
+.success-banner{background:linear-gradient(135deg,#16a34a,#22c55e);color:white;border-radius:14px;padding:18px 22px;display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.success-banner .s-icon{font-size:28px;}
+.success-banner h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
+.success-banner p{font-size:13px;opacity:.9;}
+.req-actions{display:flex;gap:10px;margin-top:10px;}
+@media(max-width:600px){
+  .form-row{grid-template-columns:1fr;}
+  #page-worker .nav{padding:0 16px;}
+  #page-worker .main{padding:20px 14px;}
 }
 </style>
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════
+     CURSOR (login page visual)
+══════════════════════════════════════════ -->
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <canvas id="bg"></canvas>
 
-<div class="layout">
+<!-- ══════════════════════════════════════════
+     PAGE: LOGIN
+══════════════════════════════════════════ -->
+<div class="page active" id="page-login">
+  <div class="layout">
     <div class="brand-panel">
-        <div class="mandala"></div>
-        <div class="eyebrow">Sahayak Platform</div>
-        <div class="logo-mark">🤝</div>
-        <h1 class="brand-headline">Your city.<br>Your <em>helpers.</em><br>One place.</h1>
-        <p class="brand-desc">Sahayak connects trusted domestic workers with families across Ahmedabad and Surat's finest societies.</p>
-        <div class="trust-row">
-            <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Email & Phone verified login</span></div>
-            <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Verified domestic help</span></div>
-        </div>
+      <div class="mandala"></div>
+      <div class="eyebrow">Sahayak Platform</div>
+      <div class="logo-mark">🤝</div>
+      <h1 class="brand-headline">Your city.<br>Your <em>helpers.</em><br>One place.</h1>
+      <p class="brand-desc">Sahayak connects trusted domestic workers with families across Ahmedabad and Surat's finest societies.</p>
+      <div class="trust-row">
+        <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Email & Phone verified login</span></div>
+        <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Verified domestic help</span></div>
+      </div>
     </div>
 
     <div class="form-panel">
-        <div class="form-inner">
-            <div class="step-indicator">
-                <div class="si-step active" id="si1"><div class="si-num">1</div>Details</div>
-                <div class="si-sep"></div>
-                <div class="si-step" id="si2"><div class="si-num">2</div>Verify</div>
-                <div class="si-sep"></div>
-                <div class="si-step" id="si3"><div class="si-num">3</div>Role</div>
-            </div>
-
-            <!-- STEP 1: INITIAL DETAILS -->
-            <div class="step active" id="step1">
-                <h2 class="form-heading">Good to see<br>you, <em>friend.</em></h2>
-                <p class="form-sub">Enter your details to receive your access code.</p>
-                <div class="field">
-                    <label>Full Name</label>
-                    <input type="text" id="s1Name" placeholder="Your full name">
-                </div>
-                <div class="field">
-                    <label>Mobile Number</label>
-                    <span class="pre-text">+91</span>
-                    <input type="tel" id="s1Phone" class="pfx" placeholder="98765 43210" maxlength="10">
-                </div>
-                <div class="field">
-                    <label>Email Address</label>
-                    <input type="email" id="s1Email" placeholder="your@email.com">
-                </div>
-                <div class="msg err" id="err1"></div>
-                <button class="btn-cta" id="btnNext" onclick="doNext()">Get Passcode &nbsp;→</button>
-            </div>
-
-            <!-- STEP 2: PASSCODE VERIFICATION -->
-            <div class="step" id="step2">
-                <h2 class="form-heading">Check your<br><em>inbox.</em> 📩</h2>
-                <p class="form-sub">We've sent a 6-digit code to your email.</p>
-                <div class="field">
-                    <label>Security Code</label>
-                    <input type="text" id="passcode" class="passcode-input" inputmode="numeric" maxlength="6" placeholder="000000">
-                </div>
-                <div class="msg err" id="err2"></div>
-                <button class="btn-cta" onclick="verifyCode()">Verify Code &nbsp;✓</button>
-                <button class="btn-ghost" onclick="goTo(1)">Back to details</button>
-            </div>
-
-            <!-- STEP 3: ROLE SELECTION -->
-            <div class="step" id="step3">
-                <h2 class="form-heading">Welcome,<br><em id="wName">User</em>! 👋</h2>
-                <p class="form-sub">Verification successful. Choose your role to continue.</p>
-                <div class="role-grid">
-                    <div class="role-card" id="role-hirer" onclick="pickRole('hirer')">
-                        <div class="role-tick">✓</div>
-                        <span>🔎</span><br><strong>Hirer</strong>
-                    </div>
-                    <div class="role-card" id="role-worker" onclick="pickRole('worker')">
-                        <div class="role-tick">✓</div>
-                        <span>🧰</span><br><strong>Worker</strong>
-                    </div>
-                </div>
-                <button class="btn-cta" onclick="doProceed()">Complete Setup</button>
-            </div>
+      <div class="form-inner">
+        <div class="step-indicator">
+          <div class="si-step active" id="si1"><div class="si-num">1</div>Details</div>
+          <div class="si-sep"></div>
+          <div class="si-step" id="si2"><div class="si-num">2</div>Verify</div>
+          <div class="si-sep"></div>
+          <div class="si-step" id="si3"><div class="si-num">3</div>Role</div>
         </div>
+
+        <!-- STEP 1 -->
+        <div class="step active" id="step1">
+          <h2 class="form-heading">Good to see<br>you, <em>friend.</em></h2>
+          <p class="form-sub">Enter your details to receive your access code.</p>
+          <div class="field">
+            <label>Full Name</label>
+            <input type="text" id="s1Name" placeholder="Your full name">
+          </div>
+          <div class="field">
+            <label>Mobile Number</label>
+            <span class="pre-text">+91</span>
+            <input type="tel" id="s1Phone" class="pfx" placeholder="98765 43210" maxlength="10">
+          </div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="s1Email" placeholder="your@email.com">
+          </div>
+          <div class="msg err" id="err1"></div>
+          <button class="btn-cta" id="btnNext" onclick="doNext()">Get Passcode &nbsp;→</button>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step" id="step2">
+          <h2 class="form-heading">Check your<br><em>inbox.</em> 📩</h2>
+          <p class="form-sub">We've sent a 6-digit code to your email.</p>
+          <div class="field">
+            <label>Security Code</label>
+            <input type="text" id="passcode" class="passcode-input" inputmode="numeric" maxlength="6" placeholder="000000">
+          </div>
+          <div class="msg err" id="err2"></div>
+          <button class="btn-cta" onclick="verifyCode()">Verify Code &nbsp;✓</button>
+          <button class="btn-ghost" onclick="goTo(1)">Back to details</button>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" id="step3">
+          <h2 class="form-heading">Welcome,<br><em id="wName">User</em>! 👋</h2>
+          <p class="form-sub">Verification successful. Choose your role to continue.</p>
+          <div class="role-grid">
+            <div class="role-card" id="role-hirer" onclick="pickRole('hirer')">
+              <div class="role-tick">✓</div>
+              <span>🔎</span><br><strong>Hirer</strong>
+            </div>
+            <div class="role-card" id="role-worker" onclick="pickRole('worker')">
+              <div class="role-tick">✓</div>
+              <span>🧰</span><br><strong>Worker</strong>
+            </div>
+          </div>
+          <button class="btn-cta" onclick="doProceed()">Complete Setup</button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<!-- SDKs -->
+<!-- ══════════════════════════════════════════
+     PAGE: HIRER
+══════════════════════════════════════════ -->
+<div class="page" id="page-hirer">
+  <nav class="nav">
+    <div class="nav-brand">Saha<span>yak</span></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="hirerShowTab('find', this)">🔎 Find Workers</button>
+      <button class="nav-tab" onclick="hirerShowTab('myrequests', this)" id="myReqTab">📋 My Requests</button>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user">Hi, <b id="hirerNavName">—</b></span>
+      <button class="logout-btn" onclick="doLogout()">← Logout</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <!-- FIND TAB -->
+    <div class="tab-panel active" id="htab-find">
+      <section class="hire-intro">
+        <div class="intro-content">
+          <div>
+            <div class="intro-badge"><span></span> Find trusted help</div>
+            <h1>Search workers near your society faster.</h1>
+            <p>Use society and work type filters to find matching workers, view their profile details, call directly, or send a hire request.</p>
+            <div class="intro-actions">
+              <div class="mini-pill">🔎 Smart society search</div>
+              <div class="mini-pill">🧰 Work type filters</div>
+              <div class="mini-pill">📋 Track requests</div>
+            </div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-row"><div class="intro-ico">🏘️</div><div><strong>Search by society</strong><small>Only matching service areas are shown first.</small></div></div>
+            <div class="intro-card-row"><div class="intro-ico">📞</div><div><strong>Call or request</strong><small>Contact workers directly or send a structured request.</small></div></div>
+            <div class="intro-card-row"><div class="intro-ico">✅</div><div><strong>Track status</strong><small>See pending, accepted and rejected hire requests.</small></div></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="search-header">
+        <h1>Find a Worker 🔎</h1>
+        <p>Search by your society or complex. Only workers serving your area are shown.</p>
+      </div>
+
+      <div class="search-box">
+        <div class="search-grid">
+          <div class="form-group">
+            <label>Society / Complex</label>
+            <div class="autocomplete-wrapper">
+              <input type="text" id="searchSociety" placeholder="Your society name..." autocomplete="off">
+              <div class="suggestions-box" id="searchSuggestions"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Work Type</label>
+            <select id="searchJob">
+              <option value="">— Any Type —</option>
+              <option>Maid</option><option>Cook</option><option>Cleaner</option>
+              <option>Driver</option><option>Electrician</option><option>Plumber</option>
+              <option>Gardener</option><option>Babysitter</option><option>Security Guard</option>
+              <option>Carpenter</option><option>Painter</option><option>Pest Control</option>
+            </select>
+          </div>
+          <div>
+            <button class="btn btn-primary" onclick="doSearch()" style="white-space:nowrap;">Search</button>
+          </div>
+        </div>
+      </div>
+      <div id="searchResults"></div>
+    </div>
+
+    <!-- MY REQUESTS TAB -->
+    <div class="tab-panel" id="htab-myrequests">
+      <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px;">📋 My Hire Requests</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px;">Track requests you've sent to workers.</p>
+      <div id="myReqList" class="req-list"></div>
+    </div>
+  </div>
+
+  <!-- HIRE MODAL -->
+  <div class="modal-overlay" id="hireModal">
+    <div class="modal">
+      <div class="modal-title">Send Hire Request 📨</div>
+      <p class="modal-sub">This worker will receive your request and can accept or reject it.</p>
+      <div class="modal-worker-tag" id="modalWorkerTag">—</div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label>Work Needed</label>
+        <select id="modalJobType">
+          <option value="">— Select Type —</option>
+          <option>Maid</option><option>Cook</option><option>Cleaner</option>
+          <option>Driver</option><option>Electrician</option><option>Plumber</option>
+          <option>Gardener</option><option>Babysitter</option><option>Security Guard</option>
+          <option>Carpenter</option><option>Painter</option><option>Pest Control</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Your Society / Location</label>
+        <input type="text" id="modalSociety" placeholder="e.g. Harmony Heights">
+      </div>
+      <div class="form-group" style="margin-bottom:0;margin-top:14px;">
+        <label>Message (optional)</label>
+        <input type="text" id="modalMessage" placeholder="e.g. Need daily 2 hours morning cooking">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeHireModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="sendHireRequest()">Send Request 🚀</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PAGE: WORKER
+══════════════════════════════════════════ -->
+<div class="page" id="page-worker">
+  <nav class="nav">
+    <div class="nav-brand">Saha<span>yak</span></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="workerShowTab('register', event)">📝 Profile</button>
+      <button class="nav-tab" onclick="workerShowTab('requests', event)" id="reqTab">📬 Requests</button>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user">Hi, <b id="workerNavName">—</b></span>
+      <button class="logout-btn" onclick="doLogout()">← Logout</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <!-- REGISTER / PROFILE TAB -->
+    <div class="tab-panel active" id="wtab-register">
+      <section class="worker-intro">
+        <div class="intro-content">
+          <div>
+            <div class="intro-badge"><span></span> Worker registration</div>
+            <h1>Build a profile families can trust.</h1>
+            <p>Add your societies, work types, availability and experience. A clean profile helps hirers understand where you work and why they should contact you.</p>
+            <div class="intro-actions">
+              <div class="mini-pill">✅ Verified phone based profile</div>
+              <div class="mini-pill">📍 Multi-society reach</div>
+              <div class="mini-pill">📬 Hire requests in one place</div>
+            </div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-row"><div class="intro-ico">🧰</div><div><strong>Show your skills</strong><small>Select multiple job types like cook, maid, driver or electrician.</small></div></div>
+            <div class="intro-card-row"><div class="intro-ico">🏘️</div><div><strong>Pick service areas</strong><small>Add every society where you are available for work.</small></div></div>
+            <div class="intro-card-row"><div class="intro-ico">⏰</div><div><strong>Set availability</strong><small>Morning, evening, full day or flexible timing.</small></div></div>
+          </div>
+        </div>
+      </section>
+
+      <div id="profileView" style="display:none;">
+        <div class="profile-hero">
+          <div class="profile-hero-inner">
+            <div class="profile-avatar" id="pAvatar">?</div>
+            <div class="profile-name" id="pName">—</div>
+            <div class="profile-meta" id="pMeta">—</div>
+            <div class="profile-badges" id="pBadges"></div>
+          </div>
+        </div>
+        <button class="btn btn-outline" onclick="editProfile()" style="margin-bottom:20px;">✏️ Edit Profile</button>
+      </div>
+
+      <div class="card" id="formCard">
+        <div class="card-title" id="formTitle">Register as a Worker</div>
+        <p class="card-sub" id="formSub">Fill in your details to get hired by families in your area.</p>
+
+        <div class="form-row">
+          <div class="form-group"><label>Full Name *</label><input type="text" id="wName" placeholder="Your full name"></div>
+          <div class="form-group"><label>Phone *</label><input type="tel" id="wPhone" placeholder="10-digit number" maxlength="10"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Age</label><input type="number" id="wAge" placeholder="e.g. 28" min="18" max="70"></div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="wGender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>Experience</label><input type="text" id="wExp" placeholder="e.g. 5 years as Maid, 2 years as Cook"></div>
+
+        <div class="form-group">
+          <label>Societies / Complexes You Work In *</label>
+          <div class="autocomplete-wrapper">
+            <div class="society-tags-area" id="societyTagsArea" onclick="document.getElementById('societyInput').focus()">
+              <span id="societyTagsContainer"></span>
+              <input type="text" id="societyInput" placeholder="Type society name..." autocomplete="off">
+            </div>
+            <div class="suggestions-box" id="societySuggestions"></div>
+          </div>
+          <input type="hidden" id="wSocieties">
+          <p style="font-size:12px;color:var(--muted);margin-top:5px;">You can add multiple societies. Workers are shown to hirers only for matched societies.</p>
+        </div>
+
+        <div class="form-group">
+          <label>Work Types *</label>
+          <div class="job-chips" id="jobChips"></div>
+          <input type="hidden" id="wJobTypes">
+        </div>
+
+        <div class="form-group">
+          <label>Available Time *</label>
+          <div class="time-chips">
+            <div class="time-chip" onclick="selectTime(this,'Morning')">🌅 Morning</div>
+            <div class="time-chip" onclick="selectTime(this,'Evening')">🌆 Evening</div>
+            <div class="time-chip" onclick="selectTime(this,'Day')">☀️ Full Day</div>
+            <div class="time-chip" onclick="selectTime(this,'Night')">🌙 Night</div>
+            <div class="time-chip" onclick="selectTime(this,'All Time')">⏰ Flexible</div>
+          </div>
+          <input type="hidden" id="wWorkTime">
+        </div>
+
+        <div class="form-group">
+          <label>About You / Additional Info</label>
+          <textarea id="wAbout" placeholder="Mention languages spoken, special skills, references available, etc."></textarea>
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="registerWorker()">✅ Save & Register</button>
+      </div>
+    </div>
+
+    <!-- REQUESTS TAB -->
+    <div class="tab-panel" id="wtab-requests">
+      <div class="card-title" style="margin-bottom:6px;font-family:'Syne',sans-serif;font-size:20px;font-weight:700;">📬 Hire Requests</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px;">People who want to hire you. Accept or reject below.</p>
+      <div id="reqList" class="req-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SDKs
+══════════════════════════════════════════ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <script>
-    // --- CONFIG ---
-    const firebaseConfig = {
-        apiKey: "AIzaSyCXTN5TDt6mLgocHw5Cycu349YubT7PCrc",
-        projectId: "sahayak-001"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    emailjs.init("sMZh0jeXwImOUtd1V");
+/* ═══════════════════════════════════════════════════════
+   DATA LAYER  (was data.js)
+═══════════════════════════════════════════════════════ */
+const USER_KEY = 'sahayak_user';
+const WORKERS_KEY = 'sahayak_workers';
+const REQUESTS_KEY = 'sahayak_requests';
 
-    let selectedRole = null;
+const JOB_TYPES = ['Maid','Cook','Cleaner','Driver','Electrician','Plumber','Gardener','Babysitter','Security Guard','Carpenter','Painter','Pest Control'];
 
-    // --- NAVIGATION & LOGIC ---
-    window.doNext = function() {
-        const name = document.getElementById('s1Name').value;
-        const phone = document.getElementById('s1Phone').value;
-        const email = document.getElementById('s1Email').value;
-        const btn = document.getElementById('btnNext');
-        
-        if(!name) return showErr('err1', 'Please enter your name');
-        if(!phone || phone.length < 10) return showErr('err1', 'Please enter 10-digit mobile number');
-        if(!email || !email.includes('@')) return showErr('err1', 'Please enter a valid email');
+const KNOWN_SOCIETIES = [
+  'Shyamal Cross Roads','Satellite','Bopal','South Bopal','Thaltej','Prahlad Nagar','Vastrapur','Bodakdev','Ambawadi',
+  'Maninagar','Ghatlodia','Chandkheda','Naranpura','Motera','Ranip','Naroda','Odhav','Vastral','Isanpur','Vejalpur',
+  'Paldi','Ellis Bridge','Navrangpura','Nehru Nagar','Science City Road','Sola','Sola Road','Sabarmati',
+  'Memnagar','New Ranip','Tragad','Nikol','Bapunagar','Rakhial','Juhapura','Sarkhej','Sanand Road',
+  'Sindhu Bhavan Road','South Bopal','Shela','Shilaj','Ambli','Zundal','Jagatpur',
+  'Surat Adajan','Surat Vesu','Surat Pal','Surat Katargam','Surat Udhna','Surat Majura Gate',
+  'Surat Althan','Surat Bhatar','Surat City Light','Surat Piplod','Surat VIP Road'
+];
 
-        // Rate limiting check
-        const lastReq = localStorage.getItem('lastPasscodeRequest');
-        if (lastReq && Date.now() - parseInt(lastReq) < 60000) {
-            return showErr('err1', 'Please wait 60s before requesting again');
-        }
+function getAllSocieties() { return KNOWN_SOCIETIES; }
 
-        btn.disabled = true;
-        btn.innerText = "Sending...";
+function getCurrentUser() {
+  const u = localStorage.getItem(USER_KEY);
+  return u ? JSON.parse(u) : null;
+}
 
-        const passcode = Math.floor(100000 + Math.random() * 900000);
+function getWorkerByPhone(phone) {
+  const all = JSON.parse(localStorage.getItem(WORKERS_KEY) || '[]');
+  return all.find(w => w.phone === phone) || null;
+}
 
-        // Store in DB
-        db.collection("passcodes").doc(email).set({
-            code: passcode,
-            expires: Date.now() + 5 * 60 * 1000,
-            name: name
-        }).then(() => {
-            return emailjs.send("service_atr4pjt", "template_xqial4p", {
-                email: email,
-                passcode: passcode
-            });
-        }).then(() => {
-            localStorage.setItem('lastPasscodeRequest', Date.now().toString());
-            document.getElementById('wName').innerText = name;
-            goTo(2);
-        }).catch(err => {
-            console.error(err);
-            showErr('err1', 'Error sending code. Try again.');
-        }).finally(() => {
-            btn.disabled = false;
-            btn.innerText = "Get Passcode →";
-        });
-    };
+function saveWorker(data) {
+  const all = JSON.parse(localStorage.getItem(WORKERS_KEY) || '[]');
+  const idx = all.findIndex(w => w.phone === data.phone);
+  if (idx >= 0) all[idx] = data; else all.push(data);
+  localStorage.setItem(WORKERS_KEY, JSON.stringify(all));
+}
 
-    window.verifyCode = function() {
-        const email = document.getElementById('s1Email').value;
-        const entered = document.getElementById('passcode').value.trim();
-        
-        if(!entered) return showErr('err2', 'Enter the 6-digit code');
+function searchWorkers(society, jobType) {
+  const all = JSON.parse(localStorage.getItem(WORKERS_KEY) || '[]');
+  return all.filter(w => {
+    const socMatch = !society || (w.societies || []).some(s => s.toLowerCase().includes(society.toLowerCase()));
+    const jobMatch = !jobType || (w.jobTypes || []).includes(jobType);
+    return socMatch && jobMatch;
+  });
+}
 
-        db.collection("passcodes").doc(email).get().then(doc => {
-            if (!doc.exists) return showErr('err2', 'Code not found. Request again.');
-            
-            const data = doc.data();
-            if (Date.now() > data.expires) return showErr('err2', 'Code expired.');
+function saveRequest(req) {
+  const all = JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
+  all.push(req);
+  localStorage.setItem(REQUESTS_KEY, JSON.stringify(all));
+}
 
-            if (entered === data.code.toString()) {
-                localStorage.setItem("user", email);
-                goTo(3);
-            } else {
-                showErr('err2', 'Incorrect passcode.');
-            }
-        }).catch(err => {
-            showErr('err2', 'Verification failed.');
-        });
-    };
+function getRequestsForHirer(phone) {
+  return JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]').filter(r => r.hirerPhone === phone);
+}
 
-    window.goTo = function(n) {
-        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-        document.getElementById('step' + n).classList.add('active');
-        
-        // Update Step Indicator
-        for(let i=1; i<=3; i++) {
-            const el = document.getElementById('si' + i);
-            if(i < n) el.className = 'si-step done';
-            else if(i === n) el.className = 'si-step active';
-            else el.className = 'si-step';
-        }
-    };
+function getRequestsForWorker(phone) {
+  return JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]').filter(r => r.workerPhone === phone);
+}
 
-    window.pickRole = function(r) {
-        selectedRole = r;
-        document.querySelectorAll('.role-card').forEach(c => c.classList.remove('chosen'));
-        document.getElementById('role-' + r).classList.add('chosen');
-    };
+function updateRequestStatus(id, status) {
+  const all = JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
+  const r = all.find(x => x.id === id);
+  if (r) r.status = status;
+  localStorage.setItem(REQUESTS_KEY, JSON.stringify(all));
+}
 
-    window.doProceed = function() {
-        if(!selectedRole) return alert('Please pick a role');
-        window.location.href = selectedRole + '.html';
-    };
+function requireLogin() {
+  if (!getCurrentUser()) { showPage('login'); return false; }
+  return true;
+}
 
-    function showErr(id, m) { 
-        const e = document.getElementById(id); 
-        e.innerText = m; 
-        e.style.display = 'block'; 
-        setTimeout(() => { e.style.display = 'none'; }, 4000);
+function timeAgo(ts) {
+  const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 60) return 'Just now';
+  const m = Math.floor(s / 60); if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60); if (h < 24) return h + 'h ago';
+  return Math.floor(h / 24) + 'd ago';
+}
+
+function initAutocomplete(inputId, dropId, getOptions) {
+  const inp = document.getElementById(inputId);
+  const drop = document.getElementById(dropId);
+  if (!inp || !drop) return;
+  inp.addEventListener('input', () => {
+    const v = inp.value.trim().toLowerCase();
+    if (!v) { drop.style.display = 'none'; return; }
+    const matches = getOptions().filter(s => s.toLowerCase().includes(v)).slice(0,8);
+    if (!matches.length) { drop.style.display = 'none'; return; }
+    drop.innerHTML = matches.map(s => {
+      const hi = s.replace(new RegExp('(' + v + ')', 'gi'), '<strong>$1</strong>');
+      return `<div class="suggestion-item">${hi}</div>`;
+    }).join('');
+    drop.style.display = 'block';
+    drop.querySelectorAll('.suggestion-item').forEach((el, i) => {
+      el.addEventListener('mousedown', () => { inp.value = matches[i]; drop.style.display = 'none'; });
+    });
+  });
+  inp.addEventListener('blur', () => setTimeout(() => drop.style.display = 'none', 200));
+}
+
+/* ═══════════════════════════════════════════════════════
+   PAGE ROUTING
+═══════════════════════════════════════════════════════ */
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  // canvas bg only on login
+  document.getElementById('bg').style.display = name === 'login' ? 'block' : 'none';
+  document.getElementById('cursor').style.display = name === 'login' ? 'block' : 'none';
+  document.getElementById('cursorRing').style.display = name === 'login' ? 'block' : 'none';
+}
+
+function doLogout() {
+  localStorage.removeItem(USER_KEY);
+  showPage('login');
+  goTo(1);
+}
+
+/* ═══════════════════════════════════════════════════════
+   FIREBASE + EMAILJS INIT
+═══════════════════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyCXTN5TDt6mLgocHw5Cycu349YubT7PCrc",
+  projectId: "sahayak-001"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+emailjs.init("sMZh0jeXwImOUtd1V");
+
+/* ═══════════════════════════════════════════════════════
+   LOGIN LOGIC
+═══════════════════════════════════════════════════════ */
+let selectedRole = null;
+
+window.doNext = function () {
+  const name = document.getElementById('s1Name').value.trim();
+  const phone = document.getElementById('s1Phone').value.trim();
+  const email = document.getElementById('s1Email').value.trim();
+  const btn = document.getElementById('btnNext');
+
+  if (!name) return showErr('err1', 'Please enter your name');
+  if (!phone || phone.length < 10) return showErr('err1', 'Please enter 10-digit mobile number');
+  if (!email || !email.includes('@')) return showErr('err1', 'Please enter a valid email');
+
+  const lastReq = localStorage.getItem('lastPasscodeRequest');
+  if (lastReq && Date.now() - parseInt(lastReq) < 60000)
+    return showErr('err1', 'Please wait 60s before requesting again');
+
+  btn.disabled = true;
+  btn.innerText = "Sending...";
+
+  const passcode = Math.floor(100000 + Math.random() * 900000);
+
+  db.collection("passcodes").doc(email).set({
+    code: passcode,
+    expires: Date.now() + 5 * 60 * 1000,
+    name: name
+  }).then(() => emailjs.send("service_atr4pjt", "template_xqial4p", { email, passcode }))
+    .then(() => {
+      localStorage.setItem('lastPasscodeRequest', Date.now().toString());
+      document.getElementById('wName').innerText = name;
+      goTo(2);
+    }).catch(() => showErr('err1', 'Error sending code. Try again.'))
+    .finally(() => { btn.disabled = false; btn.innerText = "Get Passcode →"; });
+};
+
+window.verifyCode = function () {
+  const email = document.getElementById('s1Email').value.trim();
+  const entered = document.getElementById('passcode').value.trim();
+  if (!entered) return showErr('err2', 'Enter the 6-digit code');
+
+  db.collection("passcodes").doc(email).get().then(doc => {
+    if (!doc.exists) return showErr('err2', 'Code not found. Request again.');
+    const data = doc.data();
+    if (Date.now() > data.expires) return showErr('err2', 'Code expired.');
+    if (entered === data.code.toString()) {
+      const name = document.getElementById('s1Name').value.trim();
+      const phone = document.getElementById('s1Phone').value.trim();
+      localStorage.setItem(USER_KEY, JSON.stringify({ email, name, phone }));
+      goTo(3);
+    } else {
+      showErr('err2', 'Incorrect passcode.');
     }
+  }).catch(() => showErr('err2', 'Verification failed.'));
+};
 
-    // --- VISUALS ---
-    (function(){
-        const c=document.getElementById('bg'),ctx=c.getContext('2d');
-        let W,H,pts=[];
-        function resize(){W=c.width=innerWidth;H=c.height=innerHeight}
-        resize(); window.onresize=resize;
-        class Pt{
-            constructor(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3}
-            update(){this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>W)this.vx*=-1; if(this.y<0||this.y>H)this.vy*=-1}
-            draw(){ctx.beginPath();ctx.arc(this.x,this.y,1,0,Math.PI*2);ctx.fillStyle='#1e6bff';ctx.fill()}
-        }
-        for(let i=0;i<50;i++)pts.push(new Pt());
-        function anim(){ctx.clearRect(0,0,W,H); pts.forEach(p=>{p.update();p.draw()}); requestAnimationFrame(anim)}
-        anim();
-    })();
+window.goTo = function (n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById('si' + i);
+    if (i < n) el.className = 'si-step done';
+    else if (i === n) el.className = 'si-step active';
+    else el.className = 'si-step';
+  }
+};
 
-    const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
-    document.onmousemove=(e)=>{
-        cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
-        ring.style.left=e.clientX+'px'; ring.style.top=e.clientY+'px';
-    };
+window.pickRole = function (r) {
+  selectedRole = r;
+  document.querySelectorAll('.role-card').forEach(c => c.classList.remove('chosen'));
+  document.getElementById('role-' + r).classList.add('chosen');
+};
+
+window.doProceed = function () {
+  if (!selectedRole) return alert('Please pick a role');
+  const user = getCurrentUser();
+  if (!user) return;
+  localStorage.setItem(USER_KEY, JSON.stringify({ ...user, role: selectedRole }));
+  launchPortal(selectedRole, user);
+};
+
+function launchPortal(role, user) {
+  if (role === 'hirer') {
+    document.getElementById('hirerNavName').textContent = user.name;
+    showPage('hirer');
+    updateMyReqBadge();
+    initAutocomplete('searchSociety', 'searchSuggestions', getAllSocieties);
+  } else {
+    document.getElementById('workerNavName').textContent = user.name;
+    showPage('worker');
+    initWorkerPage(user);
+  }
+}
+
+function showErr(id, m) {
+  const e = document.getElementById(id);
+  e.innerText = m; e.style.display = 'block';
+  setTimeout(() => e.style.display = 'none', 4000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   HIRER LOGIC
+═══════════════════════════════════════════════════════ */
+let hireTarget = null;
+
+function doSearch() {
+  const society = document.getElementById('searchSociety').value.trim();
+  const job = document.getElementById('searchJob').value;
+  const container = document.getElementById('searchResults');
+  const workers = searchWorkers(society, job);
+  container.innerHTML = '';
+
+  if (!workers.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">😕</div><h3>No workers found</h3><p>Try a different society name or work type.</p></div>`;
+    return;
+  }
+
+  const user = getCurrentUser();
+  container.innerHTML = `<p class="results-meta"><b>${workers.length}</b> worker${workers.length > 1 ? 's' : ''} found${society ? ` in or near "<b>${society}</b>"` : ''}</p>`;
+  const grid = document.createElement('div');
+  grid.className = 'workers-grid';
+
+  workers.forEach(w => {
+    const initials = w.name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
+    const socTags = (w.societies || []).map(s => {
+      const isMatch = society && s.toLowerCase().includes(society.toLowerCase());
+      return `<span class="soc-tag ${isMatch ? 'highlight' : ''}">${isMatch ? '✓ ' : ''}${s}</span>`;
+    }).join('');
+
+    const card = document.createElement('div');
+    card.className = 'worker-card';
+    card.innerHTML = `
+      <div class="wc-top">
+        <span class="wc-avail">⏰ ${w.workTime || 'Flexible'}</span>
+        <div class="wc-top-inner">
+          <div class="wc-avatar">${initials}</div>
+          <div class="wc-identity">
+            <div class="wc-name">${w.name}</div>
+            <div class="wc-jobs">${(w.jobTypes || []).join(' · ')}</div>
+          </div>
+        </div>
+      </div>
+      <div class="wc-body">
+        <div class="wc-detail">📞 ${w.phone}</div>
+        ${w.gender || w.age ? `<div class="wc-detail">${w.gender ? `<span>${w.gender}</span>` : ''} ${w.age ? `· Age <span>${w.age}</span>` : ''} ${w.experience ? `· Exp: <span>${w.experience}</span>` : ''}</div>` : ''}
+        ${w.about ? `<div class="wc-about">"${w.about}"</div>` : ''}
+        <div class="wc-societies">
+          <div class="wc-societies-label">Serves in</div>
+          <div class="soc-tags">${socTags || '<span class="soc-tag">—</span>'}</div>
+        </div>
+        <div class="wc-actions">
+          <a href="tel:${w.phone}" class="btn btn-sm btn-call">📞 Call</a>
+          <button class="btn btn-sm btn-hire" onclick='openHireModal(${JSON.stringify(w).replace(/'/g, "&#39;")})'>📨 Hire Request</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  container.appendChild(grid);
+}
+
+function openHireModal(worker) {
+  hireTarget = worker;
+  document.getElementById('modalWorkerTag').textContent = `${worker.name} · ${(worker.jobTypes || []).join(', ')}`;
+  document.getElementById('modalJobType').value = (worker.jobTypes || [])[0] || '';
+  document.getElementById('modalSociety').value = '';
+  document.getElementById('modalMessage').value = '';
+  document.getElementById('hireModal').classList.add('open');
+}
+
+function closeHireModal() {
+  document.getElementById('hireModal').classList.remove('open');
+  hireTarget = null;
+}
+
+document.getElementById('hireModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeHireModal();
+});
+
+function sendHireRequest() {
+  if (!hireTarget) return;
+  const jobType = document.getElementById('modalJobType').value;
+  const society = document.getElementById('modalSociety').value.trim();
+  const message = document.getElementById('modalMessage').value.trim();
+  if (!jobType) return alert('❌ Please select the work type needed.');
+  if (!society) return alert('❌ Please enter your society/location.');
+
+  const user = getCurrentUser();
+  const req = {
+    id: Date.now(),
+    workerPhone: hireTarget.phone,
+    workerName: hireTarget.name,
+    hirerPhone: user.phone,
+    hirerName: user.name,
+    jobType, society, message,
+    status: 'pending',
+    createdAt: Date.now()
+  };
+  saveRequest(req);
+  closeHireModal();
+  alert(`✅ Hire request sent to ${hireTarget.name}! You'll be notified when they respond.`);
+  updateMyReqBadge();
+}
+
+function loadMyRequests() {
+  const user = getCurrentUser();
+  const list = document.getElementById('myReqList');
+  const reqs = getRequestsForHirer(user.phone);
+
+  if (!reqs.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><h3>No requests sent yet</h3><p>When you send a hire request, it appears here with its status.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  reqs.slice().reverse().forEach(req => {
+    const card = document.createElement('div');
+    card.className = `req-card ${req.status}`;
+    card.innerHTML = `
+      <div class="req-header">
+        <div>
+          <div class="req-name">🧰 ${req.workerName}</div>
+          <div style="font-size:13px;color:var(--muted);">📞 ${req.workerPhone} · Work: ${req.jobType}</div>
+        </div>
+        <div class="req-time">${timeAgo(req.createdAt)}</div>
+      </div>
+      <div class="req-body">🏠 ${req.society}${req.message ? ` · "${req.message}"` : ''}</div>
+      ${req.status === 'pending'
+        ? `<span class="status-pill status-pending">⏳ Awaiting response</span>`
+        : req.status === 'accepted'
+          ? `<div class="accepted-banner"><div class="icon">🎉</div><div><strong>Worker is ready!</strong><p>${req.workerName} has accepted your request. Call them to confirm timing.</p></div></div>`
+          : `<span class="status-pill status-rejected">❌ Request declined</span><br><span style="font-size:13px;color:var(--muted);margin-top:6px;display:block;">You can try a different worker.</span>`
+      }`;
+    list.appendChild(card);
+  });
+}
+
+function updateMyReqBadge() {
+  const user = getCurrentUser();
+  if (!user) return;
+  const pending = getRequestsForHirer(user.phone).filter(r => r.status === 'pending').length;
+  document.getElementById('myReqTab').innerHTML = `📋 My Requests${pending > 0 ? '<span class="notif-dot"></span>' : ''}`;
+}
+
+function hirerShowTab(name, el) {
+  document.querySelectorAll('#page-hirer .tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#page-hirer .nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('htab-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+  if (name === 'myrequests') loadMyRequests();
+}
+
+/* ═══════════════════════════════════════════════════════
+   WORKER LOGIC
+═══════════════════════════════════════════════════════ */
+let selectedSocieties = [];
+let selectedJobs = [];
+
+function initWorkerPage(user) {
+  // Init job chips
+  const jobChipsEl = document.getElementById('jobChips');
+  jobChipsEl.innerHTML = '';
+  selectedJobs = [];
+  JOB_TYPES.forEach(j => {
+    const chip = document.createElement('div');
+    chip.className = 'job-chip';
+    chip.textContent = j;
+    chip.addEventListener('click', () => {
+      if (selectedJobs.includes(j)) {
+        selectedJobs = selectedJobs.filter(x => x !== j);
+        chip.classList.remove('selected');
+      } else {
+        selectedJobs.push(j);
+        chip.classList.add('selected');
+      }
+      document.getElementById('wJobTypes').value = JSON.stringify(selectedJobs);
+    });
+    jobChipsEl.appendChild(chip);
+  });
+
+  // Society autocomplete
+  const socInput = document.getElementById('societyInput');
+  const socArea = document.getElementById('societyTagsArea');
+  selectedSocieties = [];
+
+  socInput.addEventListener('focus', () => socArea.classList.add('focused'));
+  socInput.addEventListener('blur', () => setTimeout(() => socArea.classList.remove('focused'), 200));
+  socInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); const v = socInput.value.trim(); if (v) addSociety(v); }
+  });
+
+  initAutocomplete('societyInput', 'societySuggestions', getAllSocieties);
+  document.getElementById('societySuggestions').addEventListener('click', e => {
+    const item = e.target.closest('.suggestion-item');
+    if (item) addSociety(item.textContent.replace(/\*/g, '').trim());
+  });
+
+  // Pre-fill phone
+  document.getElementById('wPhone').value = user.phone || '';
+  document.getElementById('wName').value = user.name || '';
+
+  loadProfile();
+
+  // Badge
+  const pending = getRequestsForWorker(user.phone).filter(r => r.status === 'pending').length;
+  if (pending > 0) document.getElementById('reqTab').innerHTML = `📬 Requests <span class="notif-dot"></span>`;
+}
+
+function renderSocietyTags() {
+  const container = document.getElementById('societyTagsContainer');
+  container.innerHTML = '';
+  selectedSocieties.forEach(s => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.innerHTML = `${s} <span class="remove" onclick="removeSociety('${s.replace(/'/g, "\\'")}')">×</span>`;
+    container.appendChild(chip);
+  });
+  document.getElementById('wSocieties').value = JSON.stringify(selectedSocieties);
+}
+
+function addSociety(s) {
+  if (s && !selectedSocieties.includes(s)) { selectedSocieties.push(s); renderSocietyTags(); }
+  document.getElementById('societyInput').value = '';
+  document.getElementById('societySuggestions').style.display = 'none';
+}
+
+function removeSociety(s) {
+  selectedSocieties = selectedSocieties.filter(x => x !== s);
+  renderSocietyTags();
+}
+
+function selectTime(el, val) {
+  document.querySelectorAll('.time-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('wWorkTime').value = val;
+}
+
+function loadProfile() {
+  const user = getCurrentUser();
+  const w = getWorkerByPhone(user.phone);
+  if (!w) return;
+
+  document.getElementById('profileView').style.display = 'block';
+  document.getElementById('pAvatar').textContent = w.name.charAt(0).toUpperCase();
+  document.getElementById('pName').textContent = w.name;
+  document.getElementById('pMeta').textContent = `📞 ${w.phone} · ${w.gender || ''} · Age: ${w.age || '—'} · ${w.workTime || ''}`;
+  const badges = document.getElementById('pBadges');
+  badges.innerHTML = '';
+  (w.jobTypes || []).forEach(j => { const b = document.createElement('div'); b.className = 'badge'; b.textContent = j; badges.appendChild(b); });
+  (w.societies || []).slice(0, 4).forEach(s => { const b = document.createElement('div'); b.className = 'badge'; b.textContent = '📍 ' + s; badges.appendChild(b); });
+
+  document.getElementById('formCard').style.display = 'none';
+
+  const existing = document.getElementById('profileBanner');
+  if (!existing) {
+    const banner = document.createElement('div');
+    banner.id = 'profileBanner';
+    banner.className = 'success-banner';
+    banner.innerHTML = `<div class="s-icon">✅</div><div><h3>You're registered!</h3><p>Hirers in your societies can find and hire you.</p></div>`;
+    document.getElementById('wtab-register').insertBefore(banner, document.getElementById('profileView'));
+  }
+}
+
+function editProfile() {
+  const user = getCurrentUser();
+  const w = getWorkerByPhone(user.phone);
+  if (!w) return;
+  document.getElementById('formCard').style.display = 'block';
+  document.getElementById('formTitle').textContent = 'Update Your Profile';
+  document.getElementById('formSub').textContent = 'Update your details below.';
+
+  document.getElementById('wName').value = w.name;
+  document.getElementById('wPhone').value = w.phone;
+  document.getElementById('wAge').value = w.age || '';
+  document.getElementById('wGender').value = w.gender || '';
+  document.getElementById('wExp').value = w.experience || '';
+  document.getElementById('wAbout').value = w.about || '';
+  document.getElementById('wWorkTime').value = w.workTime || '';
+
+  selectedSocieties = w.societies || [];
+  renderSocietyTags();
+
+  selectedJobs = w.jobTypes || [];
+  document.querySelectorAll('.job-chip').forEach(c => {
+    if (selectedJobs.includes(c.textContent)) c.classList.add('selected');
+  });
+
+  if (w.workTime) {
+    document.querySelectorAll('.time-chip').forEach(c => {
+      if (c.textContent.includes(w.workTime) || (w.workTime === 'All Time' && c.textContent.includes('Flexible')))
+        c.classList.add('active');
+    });
+  }
+
+  document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
+}
+
+function registerWorker() {
+  const name = document.getElementById('wName').value.trim();
+  const phone = document.getElementById('wPhone').value.trim();
+  const workTime = document.getElementById('wWorkTime').value;
+
+  if (!name) return alert('❌ Please enter your full name.');
+  if (!/^\d{10}$/.test(phone)) return alert('❌ Please enter a valid 10-digit phone number.');
+  if (selectedSocieties.length === 0) return alert('❌ Please add at least one society.');
+  if (selectedJobs.length === 0) return alert('❌ Please select at least one work type.');
+  if (!workTime) return alert('❌ Please select your available time.');
+
+  const data = {
+    name, phone,
+    age: document.getElementById('wAge').value || '',
+    gender: document.getElementById('wGender').value || '',
+    experience: document.getElementById('wExp').value.trim(),
+    about: document.getElementById('wAbout').value.trim(),
+    societies: selectedSocieties,
+    jobTypes: selectedJobs,
+    workTime
+  };
+
+  saveWorker(data);
+  const user = getCurrentUser();
+  localStorage.setItem(USER_KEY, JSON.stringify({ ...user, name }));
+  document.getElementById('workerNavName').textContent = name;
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('profileView').style.display = 'none';
+  loadProfile();
+  alert('✅ Profile saved successfully!');
+}
+
+function loadRequests() {
+  const user = getCurrentUser();
+  const list = document.getElementById('reqList');
+  const reqs = getRequestsForWorker(user.phone);
+
+  if (!reqs.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📬</div><h3>No hire requests yet</h3><p>When someone wants to hire you, their request will appear here.</p></div>`;
+    return;
+  }
+
+  const pending = reqs.filter(r => r.status === 'pending').length;
+  document.getElementById('reqTab').innerHTML = `📬 Requests ${pending > 0 ? `<span class="notif-dot"></span>` : ''}`;
+
+  list.innerHTML = '';
+  reqs.slice().reverse().forEach(req => {
+    const card = document.createElement('div');
+    card.className = `req-card ${req.status}`;
+    card.innerHTML = `
+      <div class="req-header">
+        <div>
+          <div class="req-name">👤 ${req.hirerName}</div>
+          <div style="font-size:13px;color:var(--muted);">📞 ${req.hirerPhone} · 🏠 ${req.society}</div>
+        </div>
+        <div class="req-time">${timeAgo(req.createdAt)}</div>
+      </div>
+      <div class="req-body">
+        <b>Work needed:</b> ${req.jobType}<br>
+        ${req.message ? `<b>Note:</b> ${req.message}` : ''}
+      </div>
+      ${req.status === 'pending'
+        ? `<div class="req-actions">
+             <button class="btn btn-green" style="padding:9px 18px;font-size:13px;" onclick="respondReq(${req.id},'accepted')">✅ Accept</button>
+             <button class="btn btn-red" style="padding:9px 18px;font-size:13px;" onclick="respondReq(${req.id},'rejected')">❌ Reject</button>
+           </div>`
+        : `<span class="status-pill status-${req.status}">${req.status === 'accepted' ? '✅ Accepted' : '❌ Rejected'}</span>`
+      }`;
+    list.appendChild(card);
+  });
+}
+
+function respondReq(id, status) {
+  updateRequestStatus(id, status);
+  loadRequests();
+}
+
+function workerShowTab(name, e) {
+  document.querySelectorAll('#page-worker .tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#page-worker .nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('wtab-' + name).classList.add('active');
+  if (e && e.currentTarget) e.currentTarget.classList.add('active');
+  if (name === 'requests') loadRequests();
+}
+
+/* ═══════════════════════════════════════════════════════
+   VISUALS (login background canvas)
+═══════════════════════════════════════════════════════ */
+(function () {
+  const c = document.getElementById('bg'), ctx = c.getContext('2d');
+  let W, H, pts = [];
+  function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
+  resize(); window.onresize = resize;
+  class Pt {
+    constructor() { this.x = Math.random() * W; this.y = Math.random() * H; this.vx = (Math.random() - .5) * .3; this.vy = (Math.random() - .5) * .3; }
+    update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > W) this.vx *= -1; if (this.y < 0 || this.y > H) this.vy *= -1; }
+    draw() { ctx.beginPath(); ctx.arc(this.x, this.y, 1, 0, Math.PI * 2); ctx.fillStyle = '#1e6bff'; ctx.fill(); }
+  }
+  for (let i = 0; i < 50; i++) pts.push(new Pt());
+  function anim() { ctx.clearRect(0, 0, W, H); pts.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); }
+  anim();
+})();
+
+const cur = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+document.onmousemove = (e) => {
+  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+  ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+};
+
+/* ═══════════════════════════════════════════════════════
+   INIT — check if already logged in
+═══════════════════════════════════════════════════════ */
+(function () {
+  const user = getCurrentUser();
+  if (user && user.role) {
+    launchPortal(user.role, user);
+  } else {
+    showPage('login');
+  }
+})();
 </script>
 </body>
 </html>
