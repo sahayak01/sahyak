@@ -65,15 +65,19 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 .pre-text{position:absolute;left:16px;bottom:15px;font-size:14px;color:#64748b}
 .field input:focus{background:#fff;border-color:#1e6bff;box-shadow:0 0 0 4px rgba(30,107,255,.10)}
 
+/* Passcode specific styling */
+.passcode-input {
+    letter-spacing: 0.8em;
+    text-align: center;
+    font-size: 24px !important;
+    font-weight: 700;
+}
+
 .btn-cta{width:100%;padding:14px 22px;background:linear-gradient(135deg,#1e6bff 0%,#00b4d8 100%);border:none;border-radius:12px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;transition:all 0.3s;box-shadow:0 10px 28px rgba(30,107,255,.24)}
 .btn-cta:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(30,107,255,.32)}
-.btn-ghost{width:100%;padding:12px;background:#fff;border:1px solid #dbeafe;border-radius:12px;font-size:13px;color:#64748b;cursor:pointer;margin-top:9px;}
+.btn-cta:disabled{opacity: 0.6; cursor: not-allowed; transform: none;}
 
-/* OTP UI */
-.otp-boxes{display:flex;gap:6px;margin-bottom:14px;justify-content:center}
-.otp-boxes input{width:38px;height:42px;text-align:center;font-size:18px;font-weight:700;background:#fff;border:1px solid #dbeafe;border-radius:10px;color:#1e6bff;outline:none;}
-.otp-boxes input.ok{border-color:#00b4d8;background:#effaff;}
-
+/* UI */
 .role-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px}
 .role-card{position:relative;background:#f8fbff;border:1px solid #dbeafe;border-radius:15px;padding:19px 14px;cursor:pointer;transition:all 0.3s;text-align:center}
 .role-card.chosen{border-color:#1e6bff;box-shadow:0 0 0 4px rgba(30,107,255,.10);}
@@ -103,9 +107,9 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
         <div class="eyebrow">Sahayak Platform</div>
         <div class="logo-mark">🤝</div>
         <h1 class="brand-headline">Your city.<br>Your <em>helpers.</em><br>One place.</h1>
-        <p class="brand-desc">Sahayak connects trusted domestic workers with families across Surat's finest societies.</p>
+        <p class="brand-desc">Sahayak connects trusted domestic workers with families across Ahmedabad and Surat's finest societies.</p>
         <div class="trust-row">
-            <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Phone verified login</span></div>
+            <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Email & Phone verified login</span></div>
             <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Verified domestic help</span></div>
         </div>
     </div>
@@ -120,42 +124,44 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
                 <div class="si-step" id="si3"><div class="si-num">3</div>Role</div>
             </div>
 
+            <!-- STEP 1: INITIAL DETAILS -->
             <div class="step active" id="step1">
                 <h2 class="form-heading">Good to see<br>you, <em>friend.</em></h2>
-                <p class="form-sub">Enter your details to get started.</p>
+                <p class="form-sub">Enter your details to receive your access code.</p>
+                <div class="field">
+                    <label>Full Name</label>
+                    <input type="text" id="s1Name" placeholder="Your full name">
+                </div>
                 <div class="field">
                     <label>Mobile Number</label>
                     <span class="pre-text">+91</span>
                     <input type="tel" id="s1Phone" class="pfx" placeholder="98765 43210" maxlength="10">
                 </div>
                 <div class="field">
-                    <label>Your Name</label>
-                    <input type="text" id="s1Name" placeholder="Full name">
+                    <label>Email Address</label>
+                    <input type="email" id="s1Email" placeholder="your@email.com">
                 </div>
                 <div class="msg err" id="err1"></div>
-                <button class="btn-cta" id="send-otp-btn" onclick="doSendOTP()">Send Code &nbsp;→</button>
+                <button class="btn-cta" id="btnNext" onclick="doNext()">Get Passcode &nbsp;→</button>
             </div>
 
+            <!-- STEP 2: PASSCODE VERIFICATION -->
             <div class="step" id="step2">
-                <h2 class="form-heading">Verify<br><em>OTP.</em></h2>
-                <p class="form-sub">Enter the 6-digit code sent to your phone.</p>
-                <div class="otp-boxes">
-                    <input type="text" maxlength="1" class="otp-digit" id="d0">
-                    <input type="text" maxlength="1" class="otp-digit" id="d1">
-                    <input type="text" maxlength="1" class="otp-digit" id="d2">
-                    <input type="text" maxlength="1" class="otp-digit" id="d3">
-                    <input type="text" maxlength="1" class="otp-digit" id="d4">
-                    <input type="text" maxlength="1" class="otp-digit" id="d5">
+                <h2 class="form-heading">Check your<br><em>inbox.</em> 📩</h2>
+                <p class="form-sub">We've sent a 6-digit code to your email.</p>
+                <div class="field">
+                    <label>Security Code</label>
+                    <input type="text" id="passcode" class="passcode-input" inputmode="numeric" maxlength="6" placeholder="000000">
                 </div>
                 <div class="msg err" id="err2"></div>
-                <div class="msg ok" id="ok2"></div>
-                <button class="btn-cta" onclick="doVerify()">Verify &nbsp;→</button>
-                <button class="btn-ghost" onclick="goTo(1)">← Change number</button>
+                <button class="btn-cta" onclick="verifyCode()">Verify Code &nbsp;✓</button>
+                <button class="btn-ghost" onclick="goTo(1)">Back to details</button>
             </div>
 
+            <!-- STEP 3: ROLE SELECTION -->
             <div class="step" id="step3">
                 <h2 class="form-heading">Welcome,<br><em id="wName">User</em>! 👋</h2>
-                <p class="form-sub">Choose your role to continue.</p>
+                <p class="form-sub">Verification successful. Choose your role to continue.</p>
                 <div class="role-grid">
                     <div class="role-card" id="role-hirer" onclick="pickRole('hirer')">
                         <div class="role-tick">✓</div>
@@ -172,62 +178,102 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
     </div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+<!-- SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
- const firebaseConfig = {
-    apiKey: "AIzaSyCXTN5TDt6mLgocHw5Cycu349YubT7PCrc",
-    authDomain: "sahayak-001.firebaseapp.com",
-    projectId: "sahayak-001",
-    storageBucket: "sahayak-001.firebasestorage.app",
-    messagingSenderId: "579100799205",
-    appId: "1:579100799205:web:ac26464fe319857fb6240c",
-    measurementId: "G-BQGBDH111W"
-  };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    let confirmationResult = null;
+<script>
+    // --- CONFIG ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyCXTN5TDt6mLgocHw5Cycu349YubT7PCrc",
+        projectId: "sahayak-001"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    emailjs.init("sMZh0jeXwImOUtd1V");
+
     let selectedRole = null;
 
-    // 2. RECAPTCHA (Invisible)
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'send-otp-btn', {
-        'size': 'invisible'
-    });
-
-    // 3. ATTACH FUNCTIONS TO WINDOW (Fixes "Not Defined" errors)
-    window.doSendOTP = async function() {
-        const phone = document.getElementById('s1Phone').value;
+    // --- NAVIGATION & LOGIC ---
+    window.doNext = function() {
         const name = document.getElementById('s1Name').value;
-        if(!phone || phone.length < 10) return showErr('err1', 'Enter 10-digit number');
+        const phone = document.getElementById('s1Phone').value;
+        const email = document.getElementById('s1Email').value;
+        const btn = document.getElementById('btnNext');
         
-        try {
-            confirmationResult = await signInWithPhoneNumber(auth, "+91" + phone, window.recaptchaVerifier);
+        if(!name) return showErr('err1', 'Please enter your name');
+        if(!phone || phone.length < 10) return showErr('err1', 'Please enter 10-digit mobile number');
+        if(!email || !email.includes('@')) return showErr('err1', 'Please enter a valid email');
+
+        // Rate limiting check
+        const lastReq = localStorage.getItem('lastPasscodeRequest');
+        if (lastReq && Date.now() - parseInt(lastReq) < 60000) {
+            return showErr('err1', 'Please wait 60s before requesting again');
+        }
+
+        btn.disabled = true;
+        btn.innerText = "Sending...";
+
+        const passcode = Math.floor(100000 + Math.random() * 900000);
+
+        // Store in DB
+        db.collection("passcodes").doc(email).set({
+            code: passcode,
+            expires: Date.now() + 5 * 60 * 1000,
+            name: name
+        }).then(() => {
+            return emailjs.send("service_atr4pjt", "template_xqial4p", {
+                email: email,
+                passcode: passcode
+            });
+        }).then(() => {
+            localStorage.setItem('lastPasscodeRequest', Date.now().toString());
             document.getElementById('wName').innerText = name;
             goTo(2);
-        } catch (error) {
-            showErr('err1', error.message);
-            window.recaptchaVerifier.render().then(id => grecaptcha.reset(id));
-        }
+        }).catch(err => {
+            console.error(err);
+            showErr('err1', 'Error sending code. Try again.');
+        }).finally(() => {
+            btn.disabled = false;
+            btn.innerText = "Get Passcode →";
+        });
     };
 
-    window.doVerify = async function() {
-        const otp = Array.from(document.querySelectorAll('.otp-digit')).map(i => i.value).join('');
-        try {
-            await confirmationResult.confirm(otp);
-            showOk('ok2', 'Verified!');
-            setTimeout(() => goTo(3), 800);
-        } catch (error) {
-            showErr('err2', 'Invalid OTP code');
-        }
+    window.verifyCode = function() {
+        const email = document.getElementById('s1Email').value;
+        const entered = document.getElementById('passcode').value.trim();
+        
+        if(!entered) return showErr('err2', 'Enter the 6-digit code');
+
+        db.collection("passcodes").doc(email).get().then(doc => {
+            if (!doc.exists) return showErr('err2', 'Code not found. Request again.');
+            
+            const data = doc.data();
+            if (Date.now() > data.expires) return showErr('err2', 'Code expired.');
+
+            if (entered === data.code.toString()) {
+                localStorage.setItem("user", email);
+                goTo(3);
+            } else {
+                showErr('err2', 'Incorrect passcode.');
+            }
+        }).catch(err => {
+            showErr('err2', 'Verification failed.');
+        });
     };
 
     window.goTo = function(n) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.getElementById('step' + n).classList.add('active');
-        document.querySelectorAll('.si-step').forEach((s, i) => {
-            s.className = i + 1 < n ? 'si-step done' : i + 1 === n ? 'si-step active' : 'si-step';
-        });
+        
+        // Update Step Indicator
+        for(let i=1; i<=3; i++) {
+            const el = document.getElementById('si' + i);
+            if(i < n) el.className = 'si-step done';
+            else if(i === n) el.className = 'si-step active';
+            else el.className = 'si-step';
+        }
     };
 
     window.pickRole = function(r) {
@@ -238,21 +284,17 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 
     window.doProceed = function() {
         if(!selectedRole) return alert('Please pick a role');
-        window.location.href = selectedRole + ".html";
+        window.location.href = selectedRole + '.html';
     };
 
-    function showErr(id, m) { const e = document.getElementById(id); e.innerText = m; e.style.display = 'block'; }
-    function showOk(id, m) { const e = document.getElementById(id); e.innerText = m; e.style.display = 'block'; }
+    function showErr(id, m) { 
+        const e = document.getElementById(id); 
+        e.innerText = m; 
+        e.style.display = 'block'; 
+        setTimeout(() => { e.style.display = 'none'; }, 4000);
+    }
 
-    // 4. OTP INPUT AUTO-FOCUS
-    document.querySelectorAll('.otp-digit').forEach((inp, i, all) => {
-        inp.oninput = () => { if(inp.value && i < 5) all[i+1].focus(); };
-        inp.onkeydown = (e) => { if(e.key === 'Backspace' && !inp.value && i > 0) all[i-1].focus(); };
-    });
-</script>
-
-<script>
-    // Particle Background
+    // --- VISUALS ---
     (function(){
         const c=document.getElementById('bg'),ctx=c.getContext('2d');
         let W,H,pts=[];
@@ -268,7 +310,6 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
         anim();
     })();
 
-    // Cursor Logic
     const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
     document.onmousemove=(e)=>{
         cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
