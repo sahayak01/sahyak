@@ -26,8 +26,6 @@
 }
 #page-login.active{display:flex;min-height:100vh;background:linear-gradient(135deg,#eef5ff 0%,#ffffff 48%,#eaf7ff 100%);color:var(--text);font-family:'Bricolage Grotesque',sans-serif;overflow:hidden;}
 canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
-.cursor{position:fixed;width:12px;height:12px;background:#1e6bff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s;opacity:.55;}
-.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(30,107,255,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
 .layout{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;min-height:100vh;overflow:hidden;width:100%}
 .brand-panel{display:flex;flex-direction:column;justify-content:center;padding:60px 56px;position:relative;overflow:hidden;background:linear-gradient(145deg,#f7fbff 0%,#ffffff 52%,#edf6ff 100%);}
 .brand-panel::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:linear-gradient(to bottom,transparent,rgba(30,107,255,.20) 30%,rgba(0,180,216,.20) 70%,transparent)}
@@ -275,9 +273,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 
 <!-- ══════════════════════════════════════════
      CURSOR (login page visual)
-══════════════════════════════════════════ -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+══════════════════════════════════════════ -
 <canvas id="bg"></canvas>
 
 <!-- ══════════════════════════════════════════
@@ -309,8 +305,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 
         <!-- STEP 1 -->
         <div class="step active" id="step1">
-           sahayak
-          <h2 class="form-heading"> connects with trusted  <br>workers near you </h2>
+          <h2 class="form-heading"> connects with trusted  <br>workers <em>near you </em></h2>
           <p class="form-sub">Enter your details to receive your access code.</p>
           <div class="field">
             <label>Full Name</label>
@@ -703,8 +698,6 @@ function showPage(name) {
   document.getElementById('page-' + name).classList.add('active');
   // canvas bg only on login
   document.getElementById('bg').style.display = name === 'login' ? 'block' : 'none';
-  document.getElementById('cursor').style.display = name === 'login' ? 'block' : 'none';
-  document.getElementById('cursorRing').style.display = name === 'login' ? 'block' : 'none';
 }
 
 function doLogout() {
@@ -1223,14 +1216,7 @@ function workerShowTab(name, e) {
   function anim() { ctx.clearRect(0, 0, W, H); pts.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); }
   anim();
 })();
-
-const cur = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
-document.onmousemove = (e) => {
-  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
-  ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
-};
-
-/* ═══════════════════════════════════════════════════════
+   /*══════════════════════════════════════════════════════
    INIT — check if already logged in
 ═══════════════════════════════════════════════════════ */
 (function () {
