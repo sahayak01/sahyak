@@ -31,7 +31,14 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#1e6bff;font-weight:500;margin-bottom:28px;display:flex;align-items:center;gap:12px}
 .eyebrow::before{content:'';display:block;width:24px;height:1px;background:#1e6bff}
-.logo-mark{width:52px;height:52px;background:linear-gradient(135deg,rgba(30,107,255,.12),rgba(0,180,216,.10));border:1px solid rgba(30,107,255,.25);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:30px;box-shadow:0 12px 34px rgba(30,107,255,.12);}
+.logo-mark{width:210px;height:60px;background:transparent;border:none;border-radius:0;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:30px;box-shadow:none;overflow:hidden;padding:0;}
+.logo-mark img{width:100%;height:100%;object-fit:contain;display:block;}
+.mobile-login-logo{display:none;text-align:center;margin-bottom:22px;}
+.mobile-login-logo .logo-mark{width:178px;height:51px;margin:0 auto 12px;border-radius:0;padding:0;}
+.mobile-login-logo strong{display:block;font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#0f172a;}
+.mobile-login-logo span{display:block;font-size:12px;color:#64748b;margin-top:3px;}
+.step-logo{display:flex;justify-content:center;margin:-4px 0 18px;}
+.step-logo img{width:190px;height:54px;object-fit:contain;display:block;background:transparent;border:none;border-radius:0;padding:0;box-shadow:none;}
 .brand-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,4.5vw,64px);font-weight:300;line-height:1.05;letter-spacing:-1px;color:#0f172a;margin-bottom:22px}
 .brand-headline em{font-style:italic;background:linear-gradient(135deg,#1e6bff,#00b4d8,#1e6bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .brand-desc{font-size:13.5px;line-height:1.85;color:#64748b;max-width:320px;margin-bottom:44px}
@@ -78,7 +85,10 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 @media(max-width:760px){
   .brand-panel{display:none}
   .layout{grid-template-columns:1fr}
-  .form-panel{padding:20px}
+  .form-panel{align-items:flex-start;padding:28px 16px;overflow-y:auto}
+  .form-inner{max-width:430px;border-radius:20px;padding:24px 20px;}
+  .mobile-login-logo{display:block}
+  .step-logo{display:none}
 }
 
 /* ═══════════════════════════════════════════════
@@ -94,15 +104,20 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
   color:var(--ink);
 }
 #page-hirer::before, #page-worker::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:linear-gradient(rgba(30,107,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(30,107,255,.045) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 78%);}
-.nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 10px 30px rgba(30,107,255,.08);}
-.nav-brand{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:linear-gradient(135deg,#155cff,#00b8d9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.nav-brand span{background:none;-webkit-text-fill-color:var(--ink);}
-.nav-tabs{display:flex;gap:4px;}
+.nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 28px;min-height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 10px 30px rgba(30,107,255,.08);}
+.nav-left{display:flex;align-items:center;gap:12px;}
+.nav-logo{width:140px;height:40px;border-radius:0;object-fit:contain;display:block;border:none;background:transparent;padding:0;}
+.nav-brand{display:flex;align-items:center;gap:9px;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:linear-gradient(135deg,#155cff,#00b8d9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+.nav-brand-text{display:none;background:linear-gradient(135deg,#155cff,#00b8d9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-brand-text span{background:none;-webkit-text-fill-color:var(--ink);}
+.nav-tabs{display:flex;gap:4px;align-items:center;}
 .nav-tab{padding:7px 16px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:0.2s;font-family:'DM Sans',sans-serif;}
 .nav-tab.active,.nav-tab:hover{background:var(--sky-pale);color:var(--sky);}
 .nav-right{display:flex;align-items:center;gap:12px;}
 .nav-user{font-size:14px;color:var(--muted);}
 .nav-user b{color:var(--ink);}
+.back-btn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--border);background:white;color:var(--ink);font-size:18px;font-weight:700;line-height:1;cursor:pointer;transition:0.2s;font-family:'DM Sans',sans-serif;}
+.back-btn:hover{border-color:var(--sky);color:var(--sky);background:var(--sky-pale);}
 .logout-btn{padding:7px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;background:white;transition:0.2s;font-family:'DM Sans',sans-serif;}
 .logout-btn:hover{border-color:var(--red);color:var(--red);}
 .main{max-width:1100px;margin:0 auto;padding:30px 20px;}
@@ -225,8 +240,16 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 @media(max-width:700px){
   .search-grid{grid-template-columns:1fr;}
   .workers-grid{grid-template-columns:1fr;}
-  .nav{padding:0 14px;}
-  .nav-tabs .nav-tab{padding:7px 10px;font-size:12px;}
+  .nav{padding:10px 14px;display:grid;grid-template-columns:1fr auto;gap:10px 12px;align-items:center;}
+  .nav-left{gap:8px;}
+  .nav-logo{width:122px;height:35px;}
+  .nav-brand{font-size:18px;}
+  .nav-tabs{grid-column:1 / -1;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px;background:#edf4ff;border:1px solid #dbeafe;border-radius:14px;}
+  .nav-tab{width:100%;min-height:40px;border-radius:10px;}
+  .back-btn{width:34px;height:34px;font-size:16px;}
+  .logout-btn{padding:8px 11px;font-size:12px;}
+  .nav-tabs .nav-tab{padding:8px 10px;font-size:12px;}
+  .main{padding:20px 14px;}
 }
 
 /* ═══════════════════════════════════════════════
@@ -262,7 +285,6 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 .req-actions{display:flex;gap:10px;margin-top:10px;}
 @media(max-width:600px){
   .form-row{grid-template-columns:1fr;}
-  #page-worker .nav{padding:0 16px;}
   #page-worker .main{padding:20px 14px;}
 }
 </style>
@@ -274,7 +296,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
     <div class="brand-panel">
       <div class="mandala"></div>
       <div class="eyebrow">sahayak&trade; Platform</div>
-      <div class="logo-mark">🤝</div>
+      
       <h1 class="brand-headline">Your city.<br>Your <em>helpers.</em><br>One place.</h1>
       <p class="brand-desc">sahayak&trade; connect trusted domestic workers with families across Ahmedabad finest societies.</p>
       <div class="trust-row">
@@ -285,6 +307,12 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 
     <div class="form-panel">
       <div class="form-inner">
+        <div class="mobile-login-logo">
+          <div class="logo-mark">
+            <img src="logo.jpeg" alt="Sahayak logo" onerror="if(!this.dataset.png){this.dataset.png='1';this.src='logo.png';}else if(!this.dataset.jpg){this.dataset.jpg='1';this.src='logo.jpg';}else{this.closest('.logo-mark').textContent='Sahayak';}">
+          </div>
+          <span>Service Connect</span>
+        </div>
         <div class="step-indicator">
           <div class="si-step active" id="si1"><div class="si-num">1</div>Details</div>
           <div class="si-sep"></div>
@@ -295,6 +323,9 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 
         <!-- STEP 1 -->
         <div class="step active" id="step1">
+          <div class="step-logo">
+            <img src="logo.jpeg" alt="Sahayak logo" onerror="if(!this.dataset.png){this.dataset.png='1';this.src='logo.png';}else if(!this.dataset.jpg){this.dataset.jpg='1';this.src='logo.jpg';}else{this.parentElement.style.display='none';}">
+          </div>
           <h2 class="form-heading"> connects with trusted  <br>workers <em>near you </em></h2>
           <p class="form-sub">Enter your details to receive your access code.</p>
           <div class="field">
@@ -311,7 +342,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
             <input type="email" id="s1Email" placeholder="your@email.com">
           </div>
           <div class="msg err" id="err1"></div>
-          <button class="btn-cta" id="btnNext" onclick="doNext()">Get Passcode &nbsp;→</button>
+          <button class="btn-cta" id="btnNext" onclick="doNext()">Get OTP &nbsp;→</button>
         </div>
 
         <!-- STEP 2 -->
@@ -342,6 +373,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
             </div>
           </div>
           <button class="btn-cta" onclick="doProceed()">Complete Setup</button>
+          <button class="btn-ghost" onclick="goBack()">Back to code</button>
         </div>
       </div>
     </div>
@@ -353,7 +385,13 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 ══════════════════════════════════════════ -->
 <div class="page" id="page-hirer">
   <nav class="nav">
-    <div class="nav-brand">Saha<span>yak</span></div>
+    <div class="nav-left">
+      <button class="back-btn" type="button" onclick="goBack()" aria-label="Go back" title="Back">←</button>
+      <div class="nav-brand">
+        <img class="nav-logo" src="logo.jpeg" alt="Sahayak logo" onerror="if(!this.dataset.png){this.dataset.png='1';this.src='logo.png';}else if(!this.dataset.jpg){this.dataset.jpg='1';this.src='logo.jpg';}else{this.style.display='none';this.parentElement.querySelector('.nav-brand-text').style.display='inline-block';}">
+        <span class="nav-brand-text">Saha<span>yak</span></span>
+      </div>
+    </div>
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="hirerShowTab('find', this)">🔎 Find Workers</button>
       <button class="nav-tab" onclick="hirerShowTab('myrequests', this)" id="myReqTab">📋 My Requests</button>
@@ -464,7 +502,13 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 ══════════════════════════════════════════ -->
 <div class="page" id="page-worker">
   <nav class="nav">
-    <div class="nav-brand">Saha<span>yak</span></div>
+    <div class="nav-left">
+      <button class="back-btn" type="button" onclick="goBack()" aria-label="Go back" title="Back">←</button>
+      <div class="nav-brand">
+        <img class="nav-logo" src="logo.jpeg" alt="Sahayak logo" onerror="if(!this.dataset.png){this.dataset.png='1';this.src='logo.png';}else if(!this.dataset.jpg){this.dataset.jpg='1';this.src='logo.jpg';}else{this.style.display='none';this.parentElement.querySelector('.nav-brand-text').style.display='inline-block';}">
+        <span class="nav-brand-text">Saha<span>yak</span></span>
+      </div>
+    </div>
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="workerShowTab('register', event)">📝 Profile</button>
       <button class="nav-tab" onclick="workerShowTab('requests', event)" id="reqTab">📬 Requests</button>
@@ -682,7 +726,87 @@ function initAutocomplete(inputId, dropId, getOptions) {
 /* ═══════════════════════════════════════════════════════
    PAGE ROUTING
 ═══════════════════════════════════════════════════════ */
-function showPage(name) {
+let appNavStack = [];
+let isRestoringNav = false;
+
+function getActivePageName() {
+  const page = document.querySelector('.page.active');
+  return page ? page.id.replace('page-', '') : null;
+}
+
+function getActiveLoginStep() {
+  const step = document.querySelector('#page-login .step.active');
+  return step ? Number(step.id.replace('step', '')) : 1;
+}
+
+function getActiveTabName(page) {
+  const tab = document.querySelector(`#page-${page} .tab-panel.active`);
+  return tab ? tab.id.replace(page === 'hirer' ? 'htab-' : 'wtab-', '') : null;
+}
+
+function getNavState() {
+  const page = getActivePageName();
+  if (!page) return null;
+  const state = { page };
+  if (page === 'login') state.step = getActiveLoginStep();
+  if (page === 'hirer' || page === 'worker') state.tab = getActiveTabName(page);
+  return state;
+}
+
+function sameNavState(a, b) {
+  return a && b && a.page === b.page && a.step === b.step && a.tab === b.tab;
+}
+
+function rememberNavState() {
+  if (isRestoringNav) return;
+  const state = getNavState();
+  if (!state || sameNavState(appNavStack[appNavStack.length - 1], state)) return;
+  appNavStack.push(state);
+  if (appNavStack.length > 40) appNavStack.shift();
+}
+
+function findTabButton(page, tab) {
+  return Array.from(document.querySelectorAll(`#page-${page} .nav-tab`))
+    .find(btn => (btn.getAttribute('onclick') || '').includes(`'${tab}'`));
+}
+
+function restoreNavState(state) {
+  if (!state) return;
+  isRestoringNav = true;
+  showPage(state.page, { skipHistory: true });
+  if (state.page === 'login') {
+    goTo(state.step || 1, { skipHistory: true });
+  } else if (state.page === 'hirer') {
+    hirerShowTab(state.tab || 'find', findTabButton('hirer', state.tab || 'find'), { skipHistory: true });
+  } else if (state.page === 'worker') {
+    workerShowTab(state.tab || 'register', { currentTarget: findTabButton('worker', state.tab || 'register') }, { skipHistory: true });
+  }
+  isRestoringNav = false;
+}
+
+function goBack() {
+  const openModal = document.querySelector('.modal-overlay.open');
+  if (openModal) {
+    openModal.classList.remove('open');
+    return;
+  }
+
+  const previous = appNavStack.pop();
+  if (previous) {
+    restoreNavState(previous);
+    return;
+  }
+
+  if (getActivePageName() === 'login' && getActiveLoginStep() > 1) {
+    goTo(getActiveLoginStep() - 1);
+    return;
+  }
+
+  if (getActivePageName() !== 'login') doLogout();
+}
+
+function showPage(name, opts = {}) {
+  if (!opts.skipHistory) rememberNavState();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   // canvas bg only on login
@@ -690,9 +814,10 @@ function showPage(name) {
 }
 
 function doLogout() {
+  appNavStack = [];
   localStorage.removeItem(USER_KEY);
-  showPage('login');
-  goTo(1);
+  showPage('login', { skipHistory: true });
+  goTo(1, { skipHistory: true });
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -763,7 +888,8 @@ window.verifyCode = function () {
   }).catch(() => showErr('err2', 'Verification failed.'));
 };
 
-window.goTo = function (n) {
+window.goTo = function (n, opts = {}) {
+  if (!opts.skipHistory) rememberNavState();
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   document.getElementById('step' + n).classList.add('active');
   for (let i = 1; i <= 3; i++) {
@@ -950,7 +1076,8 @@ function updateMyReqBadge() {
   document.getElementById('myReqTab').innerHTML = `📋 My Requests${pending > 0 ? '<span class="notif-dot"></span>' : ''}`;
 }
 
-function hirerShowTab(name, el) {
+function hirerShowTab(name, el, opts = {}) {
+  if (!opts.skipHistory) rememberNavState();
   document.querySelectorAll('#page-hirer .tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('#page-hirer .nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('htab-' + name).classList.add('active');
@@ -1180,7 +1307,8 @@ function respondReq(id, status) {
   loadRequests();
 }
 
-function workerShowTab(name, e) {
+function workerShowTab(name, e, opts = {}) {
+  if (!opts.skipHistory) rememberNavState();
   document.querySelectorAll('#page-worker .tab-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('#page-worker .nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('wtab-' + name).classList.add('active');
