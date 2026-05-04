@@ -46,6 +46,8 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 .trust-item{display:flex;align-items:center;gap:13px}
 .trust-dot{width:5px;height:5px;border-radius:50%;background:#1e6bff;box-shadow:0 0 10px rgba(30,107,255,.35);}
 .trust-text{font-size:12.5px;color:#64748b}
+.powered-by-uma{display:inline-flex;align-items:center;gap:8px;width:max-content;margin-top:26px;padding:9px 14px;border-radius:999px;background:#fff;border:1px solid #dbeafe;color:#155cff;font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;box-shadow:0 10px 24px rgba(30,107,255,.10);}
+.powered-by-uma::before{content:'';width:7px;height:7px;border-radius:50%;background:#00b8d9;box-shadow:0 0 0 5px rgba(0,184,217,.12);}
 .form-panel{display:flex;align-items:center;justify-content:center;padding:40px 52px;overflow:hidden;background:rgba(255,255,255,.72);backdrop-filter:blur(18px);}
 .form-inner{width:100%;max-width:370px;background:rgba(255,255,255,.92);border:1px solid #dbeafe;border-radius:28px;padding:34px;box-shadow:0 28px 70px rgba(30,107,255,.14);}
 .step{display:none;animation:step-reveal 0.5s cubic-bezier(0.16,1,0.3,1) both}
@@ -116,6 +118,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
 .nav-right{display:flex;align-items:center;gap:12px;}
 .nav-user{font-size:14px;color:var(--muted);}
 .nav-user b{color:var(--ink);}
+.nav-powered{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.45px;color:#155cff;background:#e8f1ff;border:1px solid #d5e5ff;border-radius:999px;padding:7px 10px;white-space:nowrap;}
 .back-btn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--border);background:white;color:var(--ink);font-size:18px;font-weight:700;line-height:1;cursor:pointer;transition:0.2s;font-family:'DM Sans',sans-serif;}
 .back-btn:hover{border-color:var(--sky);color:var(--sky);background:var(--sky-pale);}
 .logout-btn{padding:7px 14px;border-radius:10px;border:1.5px solid var(--border);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;background:white;transition:0.2s;font-family:'DM Sans',sans-serif;}
@@ -248,6 +251,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
   .nav-tab{width:100%;min-height:40px;border-radius:10px;}
   .back-btn{width:34px;height:34px;font-size:16px;}
   .logout-btn{padding:8px 11px;font-size:12px;}
+  .nav-powered{grid-column:1 / -1;width:max-content;font-size:10px;padding:6px 9px;}
   .nav-tabs .nav-tab{padding:8px 10px;font-size:12px;}
   .main{padding:20px 14px;}
 }
@@ -303,6 +307,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
         <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Email & Phone verified login</span></div>
         <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Verified domestic help</span></div>
       </div>
+      <div class="powered-by-uma">Powered by Uma</div>
     </div>
 
     <div class="form-panel">
@@ -312,6 +317,7 @@ canvas#bg{position:fixed;inset:0;z-index:0;opacity:.35;}
             <img src="logo.jpeg" alt="Sahayak logo" onerror="if(!this.dataset.png){this.dataset.png='1';this.src='logo.png';}else if(!this.dataset.jpg){this.dataset.jpg='1';this.src='logo.jpg';}else{this.closest('.logo-mark').textContent='Sahayak';}">
           </div>
           <span>Service Connect</span>
+          <div class="powered-by-uma" style="margin:12px auto 0;">Powered by Uma</div>
         </div>
         <div class="step-indicator">
           <div class="si-step active" id="si1"><div class="si-num">1</div>Details</div>
@@ -647,20 +653,56 @@ function getCurrentUser() {
   return u ? JSON.parse(u) : null;
 }
 
+function getLocalArray(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key) || '[]');
+  } catch (err) {
+    console.warn('Local cache was reset because it could not be read.', err);
+    localStorage.setItem(key, '[]');
+    return [];
+  }
+}
+
+function setLocalArray(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function saveFirestoreDoc(collection, id, data) {
+  if (!window.sahayakDb || !id) return Promise.resolve();
+  return window.sahayakDb.collection(collection).doc(String(id)).set(data, { merge: true })
+    .catch(err => console.warn(`Firestore save failed for ${collection}/${id}`, err));
+}
+
+function updateFirestoreDoc(collection, id, data) {
+  if (!window.sahayakDb || !id) return Promise.resolve();
+  return window.sahayakDb.collection(collection).doc(String(id)).set(data, { merge: true })
+    .catch(err => console.warn(`Firestore update failed for ${collection}/${id}`, err));
+}
+
 function getWorkerByPhone(phone) {
-  const all = JSON.parse(localStorage.getItem(WORKERS_KEY) || '[]');
+  const all = getLocalArray(WORKERS_KEY);
   return all.find(w => w.phone === phone) || null;
 }
 
 function saveWorker(data) {
-  const all = JSON.parse(localStorage.getItem(WORKERS_KEY) || '[]');
+  const all = getLocalArray(WORKERS_KEY);
   const idx = all.findIndex(w => w.phone === data.phone);
-  if (idx >= 0) all[idx] = data; else all.push(data);
-  localStorage.setItem(WORKERS_KEY, JSON.stringify(all));
+  const previous = idx >= 0 ? all[idx] : {};
+  const worker = {
+    ...previous,
+    ...data,
+    id: previous.id || data.id || data.phone || String(Date.now()),
+    createdAt: previous.createdAt || data.createdAt || Date.now(),
+    updatedAt: Date.now()
+  };
+  if (idx >= 0) all[idx] = worker; else all.push(worker);
+  setLocalArray(WORKERS_KEY, all);
+  saveFirestoreDoc('workers', worker.phone, worker);
+  return worker;
 }
 
 function searchWorkers(society, jobType) {
-  const all = JSON.parse(localStorage.getItem(WORKERS_KEY) || '[]');
+  const all = getLocalArray(WORKERS_KEY);
   return all.filter(w => {
     const socMatch = !society || (w.societies || []).some(s => s.toLowerCase().includes(society.toLowerCase()));
     const jobMatch = !jobType || (w.jobTypes || []).includes(jobType);
@@ -669,24 +711,41 @@ function searchWorkers(society, jobType) {
 }
 
 function saveRequest(req) {
-  const all = JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
-  all.push(req);
-  localStorage.setItem(REQUESTS_KEY, JSON.stringify(all));
+  const all = getLocalArray(REQUESTS_KEY);
+  const id = String(req.id || Date.now());
+  const idx = all.findIndex(r => String(r.id) === id);
+  const previous = idx >= 0 ? all[idx] : {};
+  const request = {
+    ...previous,
+    ...req,
+    id,
+    createdAt: previous.createdAt || req.createdAt || Date.now(),
+    updatedAt: Date.now()
+  };
+  if (idx >= 0) all[idx] = request; else all.push(request);
+  setLocalArray(REQUESTS_KEY, all);
+  saveFirestoreDoc('requests', id, request);
+  return request;
 }
 
 function getRequestsForHirer(phone) {
-  return JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]').filter(r => r.hirerPhone === phone);
+  return getLocalArray(REQUESTS_KEY).filter(r => r.hirerPhone === phone);
 }
 
 function getRequestsForWorker(phone) {
-  return JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]').filter(r => r.workerPhone === phone);
+  return getLocalArray(REQUESTS_KEY).filter(r => r.workerPhone === phone);
 }
 
 function updateRequestStatus(id, status) {
-  const all = JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
-  const r = all.find(x => x.id === id);
-  if (r) r.status = status;
-  localStorage.setItem(REQUESTS_KEY, JSON.stringify(all));
+  const all = getLocalArray(REQUESTS_KEY);
+  const r = all.find(x => String(x.id) === String(id));
+  if (r) {
+    r.status = status;
+    r.updatedAt = Date.now();
+    setLocalArray(REQUESTS_KEY, all);
+    updateFirestoreDoc('requests', String(r.id), { status, updatedAt: r.updatedAt });
+  }
+  return r;
 }
 
 function requireLogin() {
@@ -847,9 +906,54 @@ const firebaseConfig = {
   apiKey: "AIzaSyCXTN5TDt6mLgocHw5Cycu349YubT7PCrc",
   projectId: "sahayak-001"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-emailjs.init("sMZh0jeXwImOUtd1V");
+let db = null;
+window.sahayakDb = null;
+
+try {
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  window.sahayakDb = db;
+  db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
+} catch (err) {
+  console.warn('Firebase could not be initialized. The app will keep using the local cache.', err);
+}
+
+try {
+  emailjs.init("sMZh0jeXwImOUtd1V");
+} catch (err) {
+  console.warn('EmailJS could not be initialized.', err);
+}
+
+function watchFirestoreCollection(collection, localKey, onSynced) {
+  if (!db) return;
+  db.collection(collection).onSnapshot(snapshot => {
+    const rows = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setLocalArray(localKey, rows);
+    if (onSynced) onSynced(rows);
+    refreshActivePortal();
+  }, err => console.warn(`Firestore listener failed for ${collection}`, err));
+}
+
+function refreshActivePortal() {
+  const activePage = getActivePageName();
+  if (activePage === 'hirer') {
+    updateMyReqBadge();
+    if (document.getElementById('htab-find').classList.contains('active')) doSearch();
+    if (document.getElementById('htab-myrequests').classList.contains('active')) loadMyRequests();
+  }
+  if (activePage === 'worker') {
+    const user = getCurrentUser();
+    if (user) {
+      if (document.getElementById('wtab-register').classList.contains('active')) loadProfile();
+      if (document.getElementById('wtab-requests').classList.contains('active')) loadRequests();
+      const pending = getRequestsForWorker(user.phone).filter(r => r.status === 'pending').length;
+      document.getElementById('reqTab').innerHTML = `Requests ${pending > 0 ? `<span class="notif-dot"></span>` : ''}`;
+    }
+  }
+}
+
+watchFirestoreCollection('workers', WORKERS_KEY);
+watchFirestoreCollection('requests', REQUESTS_KEY);
 
 /* ═══════════════════════════════════════════════════════
    LOGIN LOGIC
@@ -865,6 +969,7 @@ window.doNext = function () {
   if (!name) return showErr('err1', 'Please enter your name');
   if (!phone || phone.length < 10) return showErr('err1', 'Please enter 10-digit mobile number');
   if (!email || !email.includes('@')) return showErr('err1', 'Please enter a valid email');
+  if (!db) return showErr('err1', 'Firebase is not connected. Please check your Firebase setup.');
 
   const lastReq = localStorage.getItem('lastPasscodeRequest');
   if (lastReq && Date.now() - parseInt(lastReq) < 60000)
@@ -875,7 +980,7 @@ window.doNext = function () {
 
   const passcode = Math.floor(100000 + Math.random() * 900000);
 
-  db.collection("passcodes").doc(email).set({
+  db.collection("passcodes").doc(firestoreSafeId(email)).set({
     code: passcode,
     expires: Date.now() + 5 * 60 * 1000,
     name: name
@@ -892,8 +997,9 @@ window.verifyCode = function () {
   const email = document.getElementById('s1Email').value.trim();
   const entered = document.getElementById('passcode').value.trim();
   if (!entered) return showErr('err2', 'Enter the 6-digit code');
+  if (!db) return showErr('err2', 'Firebase is not connected. Please request a new code later.');
 
-  db.collection("passcodes").doc(email).get().then(doc => {
+  db.collection("passcodes").doc(firestoreSafeId(email)).get().then(doc => {
     if (!doc.exists) return showErr('err2', 'Code not found. Request again.');
     const data = doc.data();
     if (Date.now() > data.expires) return showErr('err2', 'Code expired.');
@@ -951,6 +1057,10 @@ function showErr(id, m) {
   const e = document.getElementById(id);
   e.innerText = m; e.style.display = 'block';
   setTimeout(() => e.style.display = 'none', 4000);
+}
+
+function firestoreSafeId(value) {
+  return encodeURIComponent(String(value).trim().toLowerCase());
 }
 
 /* ═══════════════════════════════════════════════════════
