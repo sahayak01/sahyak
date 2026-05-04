@@ -1271,7 +1271,6 @@ function registerWorker() {
 
   if (!name) return alert('❌ Please enter your full name.');
   if (!/^\d{10}$/.test(phone)) return alert('❌ Please enter a valid 10-digit phone number.');
-  if (selectedSocieties.length === 0) return alert('❌ Please add at least one society.');
   if (selectedJobs.length === 0) return alert('❌ Please select at least one work type.');
   if (!workTime) return alert('❌ Please select your available time.');
 
